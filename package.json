@@ -1,0 +1,19 @@
+{
+	"name": "dia-manager",
+	"version": "1.0.0",
+	"main": "src/main.js",
+	"scripts": {
+		"test": "nodemon src/main.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "AGPL-3.0-only",
+	"description": "",
+	"devDependencies": {
+		"dotenv": "^16.4.5",
+		"nodemon": "^3.1.4"
+	},
+	"dependencies": {
+		"express": "^4.19.2"
+	}
+}
