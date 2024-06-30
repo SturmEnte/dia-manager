@@ -8,8 +8,10 @@
 
 ## Road Map
 
-- [ ] Local storage version
+- [ ] Local storage version (in German)
 - [ ] Offline availability
+- [ ] English translation (english german selector)
+- [ ] Mobile availability
 - [ ] Account system
 - [ ] Online storage
 - [ ] Storage sync / Offline availability for online version
