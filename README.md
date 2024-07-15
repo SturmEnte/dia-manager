@@ -21,3 +21,5 @@
 
 [GitHub](https://github.com/SturmEnte/dia-manager)
 [GitLab](https://gitlab.com/SturmEnte/dia-manager)
+
+Test
