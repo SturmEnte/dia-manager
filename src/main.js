@@ -2,6 +2,7 @@ require("dotenv/config");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const mysql = require("mysql");
 
 const WHITE_LIST = ["api", "login", "signup"];
 
