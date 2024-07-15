@@ -34,6 +34,10 @@ app.get("/login", (req, res) => {
 	res.sendFile(path.join(__dirname, "public", "login/login.html"));
 });
 
+app.get("/signup", (req, res) => {
+	res.sendFile(path.join(__dirname, "public", "signup/signup.html"));
+});
+
 app.listen(process.env.PORT, () => {
 	console.log("Listening on port " + process.env.PORT);
 });
