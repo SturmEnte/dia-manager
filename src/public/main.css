@@ -13,3 +13,7 @@
 .section .title {
 	font-size: 1.5rem;
 }
+
+.entry {
+	border: solid black 1px;
+}
