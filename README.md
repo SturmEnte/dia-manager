@@ -10,6 +10,8 @@
 
 - [ ] Account system (in german)
 - [ ] Online only version (in german)
+- [ ] Not found page
+- [ ] Delete old sessions
 - [ ] English translation (english german selector)
 - [ ] Mobile availability
 - [ ] Offline availability
