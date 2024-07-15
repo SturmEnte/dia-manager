@@ -1,7 +1,26 @@
-const entryTemplate = document.getElementById("entry-template");
+const ENTRY_ATTRIBUTE_IDS = ["name", "ref", "lot", "produced-date", "expiration-date", "usage-start", "usage-end"];
 
-let entry = document.createElement("div");
-entry.className = "entry";
-entry.appendChild(entryTemplate.content.cloneNode(true));
+const DICTIONARY = {
+	name: "Name: ",
+	ref: "REF-Nummer: ",
+	lot: "LOT-Nummer: ",
+	"produced-date": "Herstellungsdatum: ",
+	"expiration-date": "Ablaufdatum: ",
+	"usage-start": "Nutzungsstart: ",
+	"usage-end": "Nutzungsende: ",
+};
 
-document.body.appendChild(entry);
+
+//#region Template
+// const entryTemplate = document.getElementById("entry-template");
+
+// let entry = document.createElement("div");
+// entry.className = "entry";
+// let clone = entryTemplate.content.cloneNode(true);
+
+// console.log(clone);
+
+// entry.appendChild(clone);
+
+// document.body.appendChild(entry);
+//#endregion
