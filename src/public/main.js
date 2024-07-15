@@ -10,6 +10,23 @@ const DICTIONARY = {
 	"usage-end": "Nutzungsende: ",
 };
 
+document.body.appendChild(generateEntry({ name: "Foo", ref: "Bar" }));
+
+function generateEntry(data) {
+	let element = document.createElement("div");
+	element.classList.add("entry");
+
+	for (attributeId of ENTRY_ATTRIBUTE_IDS) {
+		if (data[attributeId] == undefined) continue;
+
+		let attributeElement = document.createElement("div");
+		attributeElement.classList.add("attribute");
+		attributeElement.innerText = DICTIONARY[attributeId] + data[attributeId];
+		element.appendChild(attributeElement);
+	}
+
+	return element;
+}
 
 //#region Template
 // const entryTemplate = document.getElementById("entry-template");
