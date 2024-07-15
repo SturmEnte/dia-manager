@@ -16,3 +16,8 @@
 - [ ] Mobile availability
 - [ ] Offline availability
 - [ ] Storage sync / Offline availability for online version
+
+## Repositories
+
+[GitHub](https://github.com/SturmEnte/dia-manager)
+[GitLab](https://gitlab.com/SturmEnte/dia-manager)
