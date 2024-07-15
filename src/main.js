@@ -6,6 +6,8 @@ const mysql = require("mysql2/promise");
 
 const setupDatabase = require("./util/setupDatabase.js");
 
+const signup = require("./routes/auth/signup.js");
+
 const WHITE_LIST = ["api", "login", "signup"];
 
 (async () => {
@@ -31,6 +33,9 @@ const WHITE_LIST = ["api", "login", "signup"];
 	app.use(express.static(path.join(__dirname, "public")));
 
 	app.all("*", (req, res, next) => {
+		// Add datbase connection to request so it is available in other routes
+		req.db = connection;
+
 		for (whiteListWord of WHITE_LIST) {
 			if (req.url.includes(whiteListWord)) {
 				next();
@@ -45,6 +50,8 @@ const WHITE_LIST = ["api", "login", "signup"];
 
 		next();
 	});
+
+	app.use("/api/auth/", signup);
 
 	app.get("/", (req, res) => {
 		res.sendFile(path.join(__dirname, "public", "main/main.html"));
