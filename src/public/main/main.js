@@ -10,7 +10,7 @@ const DICTIONARY = {
 	"usage-end": "Nutzungsende: ",
 };
 
-document.body.appendChild(generateEntry({ name: "Foo", ref: "Bar" }));
+//document.body.appendChild(generateEntry({ name: "Foo", ref: "Bar" }));
 
 function generateEntry(data) {
 	let element = document.createElement("div");
