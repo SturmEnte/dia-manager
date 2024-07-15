@@ -25,8 +25,6 @@ const WHITE_LIST = ["api", "login", "signup"];
 
 	await setupDatabase(connection);
 
-	console.log(await connection.execute("SELECT * FROM test"));
-
 	const app = express();
 
 	app.use(cookieParser());
