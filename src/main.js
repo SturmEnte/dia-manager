@@ -4,16 +4,9 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const mysql = require("mysql2/promise");
 
+const setupDatabase = require("./util/setupDatabase.js");
+
 const WHITE_LIST = ["api", "login", "signup"];
-
-// connection.connect((err) => {
-// 	if (err) {
-// 		console.error("Error while connecting to database");
-// 		throw err;
-// 	}
-
-// 	console.log("Connected to database");
-// });
 
 (async () => {
 	// Connect to database
@@ -29,6 +22,8 @@ const WHITE_LIST = ["api", "login", "signup"];
 		console.error("Error while connecting to database");
 		throw error;
 	}
+
+	await setupDatabase(connection);
 
 	console.log(await connection.execute("SELECT * FROM test"));
 

@@ -1,0 +1,6 @@
+{
+	"users": {
+		"maxUsernameLength": 32,
+		"maxPasswordLength": 32
+	}
+}
