@@ -6,6 +6,19 @@ const mysql = require("mysql");
 
 const WHITE_LIST = ["api", "login", "signup"];
 
+const connection = mysql.createConnection({
+	host: process.env.MYSQL_HOST,
+	user: process.env.MYSQL_USER,
+	password: process.env.MYSQL_PASSWORD,
+});
+
+connection.connect((err) => {
+	console.error("Error while connecting to database");
+	if (err) throw err;
+
+	console.log("Connected to database");
+});
+
 const app = express();
 
 app.use(cookieParser());
