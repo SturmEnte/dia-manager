@@ -1,9 +1,11 @@
 require("dotenv/config");
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
