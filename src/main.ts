@@ -35,10 +35,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, "public")));
 
-	app.all("*", (req: any, res, next) => {
-		// Add datbase connection to request so it is available in other routes
-		req.db = client;
-
+	app.all("*", (req, res, next) => {
 		for (let whiteListWord of WHITE_LIST) {
 			if (req.url.includes(whiteListWord)) {
 				next();
@@ -54,7 +51,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 		next();
 	});
 
-	app.use("/api/auth/", signup);
+	app.use("/api/auth/", signup(client));
 
 	app.get("/", (req, res) => {
 		res.sendFile(path.join(__dirname, "public", "main/main.html"));
