@@ -1,6 +1,6 @@
 {
 	"users": {
 		"maxUsernameLength": 32,
-		"maxPasswordLength": 32
+		"maxPasswordLength": 64
 	}
 }
