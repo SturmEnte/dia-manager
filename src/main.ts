@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import path from "path";
-import mysql from "mysql2/promise";
+import pg from "pg";
 
 import setupDatabase from "./util/setupDatabase";
 
@@ -12,20 +12,23 @@ const WHITE_LIST = ["api", "login", "signup"];
 
 (async () => {
 	// Connect to database
-	let connection;
-	try {
-		connection = await mysql.createConnection({
-			host: process.env.MYSQL_HOST,
-			user: process.env.MYSQL_USER,
-			password: process.env.MYSQL_PASSWORD,
-			database: process.env.MYSQL_DATABASE,
-		});
-	} catch (error) {
-		console.error("Error while connecting to database");
-		throw error;
-	}
+	const client = new pg.Client({
+		host: process.env.PG_HOST,
+		port: Number(process.env.PG_PORT),
+		user: process.env.PG_USER,
+		password: process.env.PG_PASSWORD,
+		database: process.env.PG_DATABASE,
+	});
+	await client.connect((err) => {
+		if (err) {
+			console.error("Error while connecting to database");
+			throw err;
+		}
 
-	await setupDatabase(connection);
+		console.log("Connected to database");
+	});
+
+	await setupDatabase(client);
 
 	const app = express();
 
@@ -34,7 +37,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 
 	app.all("*", (req: any, res, next) => {
 		// Add datbase connection to request so it is available in other routes
-		req.db = connection;
+		req.db = client;
 
 		for (let whiteListWord of WHITE_LIST) {
 			if (req.url.includes(whiteListWord)) {
