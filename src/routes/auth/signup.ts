@@ -2,6 +2,7 @@ import { Router, json } from "express";
 import { Client } from "pg";
 
 import formatDate from "../../util/formatDate";
+import { hashString } from "../../util/hashing";
 
 let client: Client | undefined;
 
@@ -25,8 +26,8 @@ router.post("/signup", async (req, res) => {
 		return;
 	}
 
-	const username = req.body.username;
-	const password = req.body.password;
+	const username: string = req.body.username;
+	const password: string = hashString(req.body.password);
 
 	if ((await client.query(`SELECT COUNT(id) FROM users WHERE LOWER(username) = LOWER('${username}')`)).rows[0].count > 0) {
 		res.status(400).json({ error: "A user with that username already exists" });
