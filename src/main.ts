@@ -19,6 +19,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 		password: process.env.PG_PASSWORD,
 		database: process.env.PG_DATABASE,
 	});
+
 	await client.connect((err) => {
 		if (err) {
 			console.error("Error while connecting to database");
