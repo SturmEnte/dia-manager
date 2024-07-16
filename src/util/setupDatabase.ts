@@ -1,7 +1,7 @@
 const tablesConfig = require("../../configs/tables.json");
 
 // Check if tables exist and create them if they don't
-module.exports = async function (connection) {
+export default async function (connection) {
 	// Users table
 	try {
 		await connection.query(
@@ -15,4 +15,4 @@ module.exports = async function (connection) {
 		console.error("Error while creating users table");
 		throw error;
 	}
-};
+}

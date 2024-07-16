@@ -1,12 +1,12 @@
-require("dotenv/config");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const path = require("path");
-const mysql = require("mysql2/promise");
+import "dotenv/config";
+import express from "express";
+import cookieParser from "cookie-parser";
+import path from "path";
+import mysql from "mysql2/promise";
 
-const setupDatabase = require("./util/setupDatabase.js");
+import setupDatabase from "./util/setupDatabase";
 
-const signup = require("./routes/auth/signup.js");
+import signup from "./routes/auth/signup";
 
 const WHITE_LIST = ["api", "login", "signup"];
 
@@ -32,11 +32,11 @@ const WHITE_LIST = ["api", "login", "signup"];
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, "public")));
 
-	app.all("*", (req, res, next) => {
+	app.all("*", (req: any, res, next) => {
 		// Add datbase connection to request so it is available in other routes
 		req.db = connection;
 
-		for (whiteListWord of WHITE_LIST) {
+		for (let whiteListWord of WHITE_LIST) {
 			if (req.url.includes(whiteListWord)) {
 				next();
 				return;

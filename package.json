@@ -3,15 +3,18 @@
 	"version": "1.0.0",
 	"main": "src/main.js",
 	"scripts": {
-		"test": "nodemon src/main.js"
+		"test": "nodemon src/main.ts"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "AGPL-3.0-only",
 	"description": "",
 	"devDependencies": {
+		"@types/express": "^4.17.21",
 		"dotenv": "^16.4.5",
-		"nodemon": "^3.1.4"
+		"nodemon": "^3.1.4",
+		"ts-node": "^10.9.2",
+		"typescipt": "^1.0.0"
 	},
 	"dependencies": {
 		"cookie-parser": "^1.4.6",
