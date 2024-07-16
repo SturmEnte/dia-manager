@@ -3,12 +3,12 @@
 ## Environment Variables
 
 | Name        | Optional | Description                                                |
-| ----------- |:--------:| ---------------------------------------------------------- |
-| PORT        | ×        | The port the website should run on<br/>                    |
-| PG_HOST     | x        | The host of the PostgreSQL database                        |
-| PG_DATABASE | x        | The name of the database you want to let the server run on |
-| PG_USERNAME | x        | The username used to connect to the database server        |
-| PG_PASSWORD | x        | The password used to connect to the database server        |
+| ----------- | :------: | ---------------------------------------------------------- |
+| PORT        |    ×     | The port the website should run on<br/>                    |
+| PG_HOST     |    ×     | The host of the PostgreSQL database                        |
+| PG_DATABASE |    ×     | The name of the database you want to let the server run on |
+| PG_USERNAME |    ×     | The username used to connect to the database server        |
+| PG_PASSWORD |    ×     | The password used to connect to the database server        |
 
 ## Road Map
 
