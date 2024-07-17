@@ -28,9 +28,10 @@ class DictionaryManager {
 			return JSON.parse(localStorage.getItem(language));
 		}
 		const response = await fetch(`/${language}.dict.json`);
-		const dictionary = await response.json();
-		localStorage.setItem(language, JSON.stringify(dictionary));
-		return this.dictionary;
+		const newDictionary = await response.json();
+		localStorage.setItem(language, JSON.stringify(newDictionary));
+		console.log(newDictionary);
+		return newDictionary;
 	}
 
 	updateDictionary(language) {
@@ -38,7 +39,7 @@ class DictionaryManager {
 	}
 
 	get(key) {
-		if (this.dictionary[key] !== undefined) return this.dictionary[key];
+		if (this.dictionary && this.dictionary[key] != undefined) return this.dictionary[key];
 		return this.defaultDictionary[key];
 	}
 }
