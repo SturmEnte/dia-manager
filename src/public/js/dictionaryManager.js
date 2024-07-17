@@ -7,15 +7,19 @@ class DictionaryManager {
 	defaultDictionary;
 	dictionary;
 
+	language;
+
+	constructor(language) {
+		this.language = language;
+	}
+
 	async init() {
 		// Load the fallback dictionary
 		this.defaultDictionary = await this.loadDictionary(this.DEFAULT_LANGUAGE);
 
-		const language = getCookieValue("language");
-
 		// Load the normal dictionary
-		if (language) {
-			this.dictionary = await this.loadDictionary(language);
+		if (this.language) {
+			this.dictionary = await this.loadDictionary(this.language);
 		}
 	}
 
@@ -29,5 +33,12 @@ class DictionaryManager {
 		return this.dictionary;
 	}
 
-	get(key) {}
+	updateDictionary(language) {
+		// TBD
+	}
+
+	get(key) {
+		if (this.dictionary[key] !== undefined) return this.dictionary[key];
+		return this.defaultDictionary[key];
+	}
 }
