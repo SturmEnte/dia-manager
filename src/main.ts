@@ -5,6 +5,7 @@ import path from "path";
 import pg from "pg";
 
 import setupDatabase from "./util/setupDatabase";
+import getLanguageFilePath from "./util/getLanguageFilePath";
 
 import signup from "./routes/auth/signup";
 import login from "./routes/auth/login";
@@ -57,15 +58,15 @@ const WHITE_LIST = ["api", "login", "signup"];
 	app.use("/api/auth/", login(client));
 
 	app.get("/", (req, res) => {
-		res.sendFile(path.join(__dirname, "public", "main/main.html"));
+		res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "main/main.html"), req.cookies["language"]));
 	});
 
 	app.get("/login", (req, res) => {
-		res.sendFile(path.join(__dirname, "public", "login/login.html"));
+		res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "login/login.html"), req.cookies["language"]));
 	});
 
 	app.get("/signup", (req, res) => {
-		res.sendFile(path.join(__dirname, "public", "signup/signup.html"));
+		res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "signup/signup.html"), req.cookies["language"]));
 	});
 
 	app.listen(process.env.PORT, () => {
