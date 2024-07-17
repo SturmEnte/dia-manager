@@ -27,17 +27,3 @@ function generateEntry(data) {
 
 	return element;
 }
-
-//#region Template
-// const entryTemplate = document.getElementById("entry-template");
-
-// let entry = document.createElement("div");
-// entry.className = "entry";
-// let clone = entryTemplate.content.cloneNode(true);
-
-// console.log(clone);
-
-// entry.appendChild(clone);
-
-// document.body.appendChild(entry);
-//#endregion
