@@ -4,10 +4,10 @@ const DICTIONARY = {
 	name: "Name: ",
 	ref: "REF-Nummer: ",
 	lot: "LOT-Nummer: ",
-	"produced-date": "Herstellungsdatum: ",
-	"expiration-date": "Ablaufdatum: ",
-	"usage-start": "Nutzungsstart: ",
-	"usage-end": "Nutzungsende: ",
+	"date-of-manufacture": "Date of Manufacture: ",
+	"expiry-date": "Expiry Date: ",
+	"start-of-use": "Start of use: ",
+	"end-of-use": "End of use: ",
 };
 
 //document.body.appendChild(generateEntry({ name: "Foo", ref: "Bar" }));
