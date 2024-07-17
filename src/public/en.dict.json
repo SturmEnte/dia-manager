@@ -1,8 +1,8 @@
 {
 	"_version": 1,
 	"name": "Name: ",
-	"ref": "REF-Nummer: ",
-	"lot": "LOT-Nummer: ",
+	"ref": "REF-number: ",
+	"lot": "LOT-number: ",
 	"date-of-manufacture": "Date of Manufacture: ",
 	"expiry-date": "Expiry Date: ",
 	"start-of-use": "Start of use: ",
