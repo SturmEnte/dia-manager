@@ -2,7 +2,7 @@ const usernameElement = document.getElementById("username");
 const passwordElement = document.getElementById("password");
 const errorElement = document.getElementById("error");
 
-document.getElementById("login-button").onclick = () => {
+document.getElementById("signup-button").onclick = () => {
 	fetch("/api/auth/signup", {
 		method: "post",
 		headers: {
