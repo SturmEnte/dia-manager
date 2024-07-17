@@ -12,14 +12,7 @@
 
 ## Road Map
 
-- [ ] Account system (in german)
-- [ ] Online only version (in german)
-- [ ] Not found page
-- [ ] Delete old sessions
-- [ ] English translation (english german selector)
-- [ ] Mobile availability
-- [ ] Offline availability
-- [ ] Storage sync / Offline availability for online version
+Moved to [here](https://github.com/users/SturmEnte/projects/2/views/1)
 
 ## Repositories
 
