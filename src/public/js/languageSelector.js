@@ -28,9 +28,12 @@ if (getCookieValue("language")) {
 	languageSelector.value = DEFAULT_LANGUAGE;
 }
 
-languageSelector.oninput = () => {
-	console.log(languageSelector.value);
-	// TBD
+languageSelector.oninput = async () => {
+	// Preload the language to the local storage
+	await DictionaryManager.prototype.loadDictionary(languageSelector.value);
+
+	document.cookie = `language=${languageSelector.value};path=/`;
+	location.reload();
 };
 
 document.body.appendChild(languageSelector);
