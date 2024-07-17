@@ -1,29 +1,24 @@
-const ENTRY_ATTRIBUTE_IDS = ["name", "ref", "lot", "produced-date", "expiration-date", "usage-start", "usage-end"];
+(async () => {
+	const ENTRY_ATTRIBUTE_IDS = ["name", "ref", "lot", "date-of-manufacture", "expiry-date", "start-of-use", "end-of-use"];
 
-const DICTIONARY = {
-	name: "Name: ",
-	ref: "REF-Nummer: ",
-	lot: "LOT-Nummer: ",
-	"date-of-manufacture": "Date of Manufacture: ",
-	"expiry-date": "Expiry Date: ",
-	"start-of-use": "Start of use: ",
-	"end-of-use": "End of use: ",
-};
+	const dictionaryManager = new DictionaryManager(getCookieValue("language"));
+	await dictionaryManager.init();
 
-//document.body.appendChild(generateEntry({ name: "Foo", ref: "Bar" }));
+	document.body.appendChild(generateEntry({ name: "name", ref: "ref" }));
 
-function generateEntry(data) {
-	let element = document.createElement("div");
-	element.classList.add("entry");
+	function generateEntry(data) {
+		let element = document.createElement("div");
+		element.classList.add("entry");
 
-	for (attributeId of ENTRY_ATTRIBUTE_IDS) {
-		if (data[attributeId] == undefined) continue;
+		for (attributeId of ENTRY_ATTRIBUTE_IDS) {
+			if (data[attributeId] == undefined) continue;
 
-		let attributeElement = document.createElement("div");
-		attributeElement.classList.add("attribute");
-		attributeElement.innerText = DICTIONARY[attributeId] + data[attributeId];
-		element.appendChild(attributeElement);
+			let attributeElement = document.createElement("div");
+			attributeElement.classList.add("attribute");
+			attributeElement.innerText = dictionaryManager.get(attributeId) + data[attributeId];
+			element.appendChild(attributeElement);
+		}
+
+		return element;
 	}
-
-	return element;
-}
+})();
