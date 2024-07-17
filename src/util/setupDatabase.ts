@@ -18,4 +18,19 @@ export default async function (client: Client) {
 		console.error("Error while creating users table");
 		throw error;
 	}
+
+	// Access token table
+	try {
+		await client.query(
+			`CREATE TABLE IF NOT EXISTS access_tokens (
+				id SERIAL PRIMARY KEY,
+				user_id INT NOT NULL,
+				token VARCHAR(${tablesConfig.users.tokenLength}) NOT NULL,
+				created DATE NOT NULL
+			);`
+		);
+	} catch (error) {
+		console.error("Error while creating access_tokens table");
+		throw error;
+	}
 }
