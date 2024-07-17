@@ -1,0 +1,9 @@
+{
+	"name": "Name: ",
+	"ref": "REF-Nummer: ",
+	"lot": "LOT-Nummer: ",
+	"date-of-manufacture": "Date of Manufacture: ",
+	"expiry-date": "Expiry Date: ",
+	"start-of-use": "Start of use: ",
+	"end-of-use": "End of use: "
+}
