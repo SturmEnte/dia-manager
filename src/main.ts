@@ -7,6 +7,7 @@ import pg from "pg";
 import setupDatabase from "./util/setupDatabase";
 
 import signup from "./routes/auth/signup";
+import login from "./routes/auth/login";
 
 const WHITE_LIST = ["api", "login", "signup"];
 
@@ -53,6 +54,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 	});
 
 	app.use("/api/auth/", signup(client));
+	app.use("/api/auth/", login(client));
 
 	app.get("/", (req, res) => {
 		res.sendFile(path.join(__dirname, "public", "main/main.html"));
