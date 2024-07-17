@@ -4,7 +4,7 @@
 
 | Name        | Optional | Description                                                |
 | ----------- | :------: | ---------------------------------------------------------- |
-| PORT        |    ×     | The port the website should run on<br/>                    |
+| PORT        |    ×     | The port the website should run on                         |
 | PG_HOST     |    ×     | The host of the PostgreSQL database                        |
 | PG_DATABASE |    ×     | The name of the database you want to let the server run on |
 | PG_USERNAME |    ×     | The username used to connect to the database server        |
