@@ -14,6 +14,13 @@
 
 Moved to [here](https://github.com/users/SturmEnte/projects/2/views/1)
 
+## Languages
+
+| Language | Availability              |
+| -------- | ------------------------- |
+| English  | Default                   |
+| German   | 100% (if release version) |
+
 ## Repositories
 
 [GitHub](https://github.com/SturmEnte/dia-manager)
