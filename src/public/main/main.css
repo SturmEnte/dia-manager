@@ -1,5 +1,7 @@
 :root {
 	--margin: 3vw;
+
+	--title-size: 3vw;
 }
 
 body {
@@ -19,7 +21,7 @@ body {
 }
 
 #main-title {
-	font-size: 2.5vw;
+	font-size: var(--title-size);
 	color: var(--primary);
 	min-width: 0;
 }
@@ -34,6 +36,40 @@ body {
 #menu select,
 #menu a {
 	margin-left: 0.8vw;
+}
+
+#language-selector,
+#logout-link,
+#device-selector {
+	background: var(--secondary);
+}
+
+#language-selector,
+#logout-link {
+	width: var(--title-size);
+	height: var(--title-size);
+	border-radius: 100%;
+	text-align: center;
+	cursor: pointer;
+}
+
+#language-selector {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: none;
+	font-size: calc(var(--title-size) * 0.6);
+}
+
+#logout-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#logout-link img {
+	width: calc(var(--title-size) * 0.8);
+	height: calc(var(--title-size) * 0.8);
 }
 
 #content {
@@ -51,3 +87,10 @@ body {
 .entry {
 	border: solid black 1px;
 }
+
+/* .language-selector {
+	width: 3vw;
+	height: 3vw;
+	border-radius: 100%;
+	font-size: 2vw;
+} */
