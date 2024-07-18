@@ -1,9 +1,9 @@
 import { Router, json } from "express";
 import { Client } from "pg";
 
-import formatDate from "../../util/formatDate";
-import { hashString } from "../../util/hashing";
-import generateValidAccessToken from "../../util/generateValidAccessToken";
+import formatDate from "../../../util/formatDate";
+import { hashString } from "../../../util/hashing";
+import generateValidAccessToken from "../../../util/generateValidAccessToken";
 
 let client: Client | undefined;
 

@@ -7,8 +7,8 @@ import pg from "pg";
 import setupDatabase from "./util/setupDatabase";
 import getLanguageFilePath from "./util/getLanguageFilePath";
 
-import signup from "./routes/auth/signup";
-import login from "./routes/auth/login";
+import signup from "./routes/api/auth/signup";
+import login from "./routes/api/auth/login";
 
 const WHITE_LIST = ["api", "login", "signup"];
 

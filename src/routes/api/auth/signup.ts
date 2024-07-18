@@ -1,10 +1,10 @@
 import { Router, json } from "express";
 import { Client } from "pg";
 
-import formatDate from "../../util/formatDate";
-import { hashString } from "../../util/hashing";
+import formatDate from "../../../util/formatDate";
+import { hashString } from "../../../util/hashing";
 
-const userCredentials = require("../../../configs/usercredentials.json");
+const userCredentials = require("../../../../configs/usercredentials.json");
 
 let client: Client | undefined;
 
