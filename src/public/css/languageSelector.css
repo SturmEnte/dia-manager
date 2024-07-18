@@ -13,7 +13,11 @@
 	text-align: center;
 	cursor: pointer;
 	border: none;
+	/* Self written */
 	font-family: "Noto Color Emoji", sans-serif;
+	position: absolute;
+	top: 1vw;
+	right: 1vw;
 }
 
 /*To remove button from IE11, thank you Matt */
