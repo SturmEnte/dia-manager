@@ -14,20 +14,21 @@
 		<script src="/main/main.js" defer></script>
 	</head>
 	<body>
-		<div class="title">Dia Manager</div>
-		<div id="sections">
-			<div id="catheters" class="section">
-				<div class="title">Catheters</div>
-				<button class="new">New</button>
-				<div class="current">Current</div>
-				<div class="history"></div>
+		<div id="header">
+			<div id="main-title">Dia Manager</div>
+			<div id="menu">
+				<select id="device">
+					<option value="catheters">Catheters</option>
+					<option value="sensors">Sensors</option>
+				</select>
+				<select id="language-selector"></select>
+				<a href="/logout"> L</a>
 			</div>
-			<div id="sensors" class="section">
-				<div class="title">Sensors</div>
-				<button class="new">New</button>
-				<div class="current">Current</div>
-				<div class="history"></div>
-			</div>
+		</div>
+
+		<div id="devices">
+			<div id="catheters" class="device">Catheters</div>
+			<div id="sensors" class="device">Sensors</div>
 		</div>
 
 		<!-- This template is only used as an aid while programming and not really used because it was to complicated to use -->
