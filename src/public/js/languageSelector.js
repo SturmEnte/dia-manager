@@ -12,6 +12,7 @@ const LANGUAGES = [
 const DEFAULT_LANGUAGE = "en";
 
 const languageSelector = document.createElement("select");
+languageSelector.classList.add("language-selector");
 
 for (language of LANGUAGES) {
 	const languageOption = document.createElement("option");
