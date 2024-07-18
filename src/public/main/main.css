@@ -13,7 +13,7 @@ body {
 #header {
 	width: 100%;
 	height: 4vw;
-	background: red;
+	/* background: red; */
 	margin-bottom: calc(var(--margin) / 2);
 	display: flex;
 	align-items: center;
@@ -23,7 +23,6 @@ body {
 #main-title {
 	font-size: var(--title-size);
 	color: var(--primary);
-	min-width: 0;
 }
 
 #menu {
@@ -42,12 +41,13 @@ body {
 #logout-link,
 #device-selector {
 	background: var(--secondary);
+	height: var(--title-size);
 }
 
 #language-selector,
 #logout-link {
 	width: var(--title-size);
-	height: var(--title-size);
+
 	border-radius: 100%;
 	text-align: center;
 	cursor: pointer;
@@ -59,6 +59,12 @@ body {
 	appearance: none;
 	border: none;
 	font-size: calc(var(--title-size) * 0.6);
+}
+
+#device-selector {
+	border-radius: 0.8vw;
+	border: none;
+	font-size: calc(var(--title-size) * 0.5);
 }
 
 #logout-link {
