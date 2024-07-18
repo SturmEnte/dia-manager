@@ -20,6 +20,10 @@
 	right: 1vw;
 }
 
+.language-selector * {
+	font-family: "Noto Color Emoji", sans-serif;
+}
+
 /*To remove button from IE11, thank you Matt */
 .language-selector::-ms-expand {
 	display: none;
