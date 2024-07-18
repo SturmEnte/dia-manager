@@ -1,6 +1,7 @@
 :root {
-	--background-prim: rgb(39, 39, 39);
-	--background-sec: rgb(46, 46, 46);
+	--background: white;
+	--primary: #2589ff;
+	--secondary: #a5deff;
 }
 
 * {
