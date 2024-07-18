@@ -23,6 +23,17 @@ body {
 	color: var(--primary);
 }
 
+#main-title:after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: black;
+	position: relative;
+	bottom: 0;
+	left: 0;
+}
+
 #menu {
 	display: flex;
 	align-items: center;
