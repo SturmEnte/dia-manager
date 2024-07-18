@@ -5,7 +5,7 @@
 	font-size: 2vw;
 }
 
-/* The code bellow was copied from: https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/ */
+/* Parts of the code bellow was copied from: https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/ */
 .language-selector {
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -13,6 +13,7 @@
 	text-align: center;
 	cursor: pointer;
 	border: none;
+	font-family: "Noto Color Emoji", sans-serif;
 }
 
 /*To remove button from IE11, thank you Matt */
