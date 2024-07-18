@@ -4,8 +4,6 @@
 	const dictionaryManager = new DictionaryManager(getCookieValue("language"));
 	await dictionaryManager.init();
 
-	document.body.appendChild(generateEntry({ name: "name", ref: "ref" }));
-
 	function generateEntry(data) {
 		let element = document.createElement("div");
 		element.classList.add("entry");
