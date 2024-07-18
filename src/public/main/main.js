@@ -4,6 +4,15 @@
 	const dictionaryManager = new DictionaryManager(getCookieValue("language"));
 	await dictionaryManager.init();
 
+	const languageSelector = new LanguageSelector(document.getElementById("language-selector"));
+	languageSelector.addLanguageChangeListener(async (language) => {
+		// Preload the language to the local storage
+		await DictionaryManager.prototype.loadDictionary(language);
+
+		document.cookie = `language=${language};path=/`;
+		location.reload();
+	});
+
 	function generateEntry(data) {
 		let element = document.createElement("div");
 		element.classList.add("entry");

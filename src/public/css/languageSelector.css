@@ -1,30 +1,9 @@
-.language-selector {
-	width: 3vw;
-	height: 3vw;
-	border-radius: 100%;
-	font-size: 2vw;
-}
-
 /* Parts of the code bellow was copied from: https://fabriceleven.com/design/clever-way-to-change-the-drop-down-selector-arrow-icon/ */
 .language-selector {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	text-align: center;
-	cursor: pointer;
-	border: none;
 	/* Self written */
 	font-family: "Noto Color Emoji", sans-serif;
-	position: absolute;
-	top: 1vw;
-	right: 1vw;
 }
 
 .language-selector * {
 	font-family: "Noto Color Emoji", sans-serif;
-}
-
-/*To remove button from IE11, thank you Matt */
-.language-selector::-ms-expand {
-	display: none;
 }
