@@ -30,8 +30,6 @@
 
 	productSelector.oninput = () => {
 		for (product of products) {
-			console.log(product);
-
 			if (product.id != productSelector.value) {
 				product.element.hidden = true;
 				console.log("hide");
