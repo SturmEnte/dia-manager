@@ -10,9 +10,9 @@
 | PG_USERNAME |    ×     | The username used to connect to the database server        |
 | PG_PASSWORD |    ×     | The password used to connect to the database server        |
 
-## Road Map
+## Development progess / tasks
 
-Moved to [here](https://github.com/users/SturmEnte/projects/2/views/1)
+[here](https://github.com/users/SturmEnte/projects/2/views/1)
 
 ## Languages
 
