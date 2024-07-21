@@ -35,9 +35,11 @@ const WHITE_LIST = ["api", "login", "signup"];
 
 	await setupDatabase(client);
 
+	const PATH_TO_PUBLIC_FOLDER = path.join(__dirname, config.publicLocation);
+
 	const app = express();
 
-	app.use(express.static(path.join(__dirname, config.publicLocation)));
+	app.use(express.static(PATH_TO_PUBLIC_FOLDER));
 
 	app.use(cookieParser());
 
@@ -50,11 +52,15 @@ const WHITE_LIST = ["api", "login", "signup"];
 		}
 
 		if (req.cookies["loggedIn"] == undefined) {
-			res.redirect("/login");
+			res.redirect("/#/login");
 			return;
 		}
 
 		next();
+	});
+
+	app.get("/#/*", (req, res, next) => {
+		res.sendFile(path.join(PATH_TO_PUBLIC_FOLDER, "index.html"));
 	});
 
 	app.use("/api/auth/", signup(client));
