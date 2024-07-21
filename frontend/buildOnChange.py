@@ -2,6 +2,7 @@ import time
 from os import system
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from colorama import Back
 
 
 class MyHandler(FileSystemEventHandler):
@@ -12,16 +13,16 @@ class MyHandler(FileSystemEventHandler):
         if event.is_directory:
             return  # Ignore non-file events
 
-        print(f"File {event.src_path} has been modified.")
+        print(f"{Back.BLUE}File {Back.MAGENTA}{event.src_path}{Back.BLUE} has been modified.{Back.RESET}")
 
         # Check if the modified file is in the ignore list
         for ignore_string in self.ignore_list:
             if ignore_string in event.src_path:
-                print("Ignoring file")
+                print(Back.YELLOW + "Ignoring file" + Back.RESET)
                 return
             
         system("npm run build")
-        print("Build finished")
+        print(Back.GREEN + "Build finished" + Back.RESET)
 
 
 if __name__ == "__main__":
