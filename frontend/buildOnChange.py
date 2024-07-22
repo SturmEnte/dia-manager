@@ -26,7 +26,6 @@ class MyHandler(FileSystemEventHandler):
 
 
 if __name__ == "__main__":
-    # Define your list of files to ignore
     ignore_list = ["vite.config.ts", "dist", "node_modules"]
 
     path_to_watch = "./"
