@@ -1,5 +1,7 @@
 <script>
 	import LogoutIconBlack from "../assets/icons/material/logout-black.svg";
+
+	import LanguageSelector from "../lib/LanguageSelector.svelte";
 </script>
 
 <main>
@@ -10,7 +12,9 @@
 				<option value="catheters">Catheters</option>
 				<option value="sensors">Sensors</option>
 			</select>
-			<select id="language-selector"></select>
+			<div>
+				<LanguageSelector />
+			</div>
 			<a href="/logout" id="logout-link">
 				<img src={LogoutIconBlack} alt="Logout" />
 			</a>
@@ -69,32 +73,23 @@
 	}
 
 	#menu select,
-	#menu a {
+	#menu a,
+	#menu div {
 		margin-left: 0.8vw;
 	}
 
-	#language-selector,
 	#logout-link,
 	#product-selector {
 		background: var(--secondary);
 		height: var(--title-size);
 	}
 
-	#language-selector,
 	#logout-link {
 		width: var(--title-size);
 
 		border-radius: 100%;
 		text-align: center;
 		cursor: pointer;
-	}
-
-	#language-selector {
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		border: none;
-		font-size: calc(var(--title-size) * 0.6);
 	}
 
 	#product-selector {
@@ -116,17 +111,5 @@
 
 	#products {
 		background: blue;
-	}
-
-	.element {
-		border: solid black 1px;
-	}
-
-	.section .title {
-		font-size: 1.5rem;
-	}
-
-	.entry {
-		border: solid black 1px;
 	}
 </style>
