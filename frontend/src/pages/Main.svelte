@@ -1,3 +1,7 @@
+<script>
+	import LogoutIconBlack from "../assets/icons/material/logout-black.svg";
+</script>
+
 <main>
 	<div id="header">
 		<div id="main-title">Dia Manager</div>
@@ -8,7 +12,7 @@
 			</select>
 			<select id="language-selector"></select>
 			<a href="/logout" id="logout-link">
-				<img src="/icons/material/logout-black.svg" alt="Logout" />
+				<img src={LogoutIconBlack} alt="Logout" />
 			</a>
 		</div>
 	</div>
