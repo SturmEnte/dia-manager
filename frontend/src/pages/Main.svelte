@@ -25,6 +25,8 @@
 		<div id="catheters" class="product">Catheters</div>
 		<div id="sensors" class="product">Sensors</div>
 	</div>
+
+	<div id="author">Made by SturmEnte with ❤️</div>
 </main>
 
 <style>
@@ -111,5 +113,17 @@
 
 	#products {
 		background: blue;
+	}
+
+	#author {
+		position: absolute;
+		width: 100vw;
+		left: 0;
+		bottom: 1vw;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: rgb(126, 126, 126);
+		font-size: 0.95vw;
 	}
 </style>
