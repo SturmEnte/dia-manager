@@ -147,7 +147,6 @@
    }
 
    #products {
-      background: blue;
       width: 100%;
       height: calc(100vh - 2 * var(--margin) - var(--header-size) - calc(var(--margin) / 2));
       overflow: hidden;
