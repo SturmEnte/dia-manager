@@ -4,6 +4,6 @@
 	export let databaseId = "catheter";
 </script>
 
-<main>{name}</main>
+<main {databaseId}>{name}</main>
 
 <style></style>

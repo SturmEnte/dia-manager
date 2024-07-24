@@ -16,15 +16,32 @@
 			databaseId: "sensor",
 		},
 	];
+
+	let prodcuts;
+
+	function changeProduct(event) {
+		let selectedProduct = event.srcElement.value;
+
+		for (let element of products.children) {
+			console.log(element.attributes.databaseId.value);
+			console.log(selectedProduct);
+
+			if (element.attributes.databaseId.value == selectedProduct) {
+				element.hidden = false;
+				continue;
+			}
+			element.hidden = true;
+		}
+	}
 </script>
 
 <main>
 	<div id="header">
 		<div id="main-title">Dia Manager</div>
 		<div id="menu">
-			<select id="product-selector">
-				{#each PRODUCTS as { name, databaseId }, index (databaseId)}
-					<option value={index}>{name}</option>
+			<select id="product-selector" on:input={changeProduct}>
+				{#each PRODUCTS as { name, databaseId }, index}
+					<option value={databaseId}>{name}</option>
 				{/each}
 			</select>
 			<div>
@@ -36,7 +53,7 @@
 		</div>
 	</div>
 
-	<div id="products">
+	<div id="products" bind:this={prodcuts}>
 		{#each PRODUCTS as { name, databaseId }, index (databaseId)}
 			<Product {name} {databaseId} />
 		{/each}
