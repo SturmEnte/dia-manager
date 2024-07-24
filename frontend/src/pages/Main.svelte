@@ -2,6 +2,20 @@
 	import LogoutIconBlack from "../assets/icons/material/logout-black.svg";
 
 	import LanguageSelector from "../lib/LanguageSelector.svelte";
+	import Product from "../lib/Product.svelte";
+
+	// The available products
+	// This hard coded list can later be replaced with a custom system
+	const PRODUCTS = [
+		{
+			name: "Catheters",
+			databaseId: "catheter",
+		},
+		{
+			name: "Sensors",
+			databaseId: "sensor",
+		},
+	];
 </script>
 
 <main>
@@ -9,8 +23,9 @@
 		<div id="main-title">Dia Manager</div>
 		<div id="menu">
 			<select id="product-selector">
-				<option value="catheters">Catheters</option>
-				<option value="sensors">Sensors</option>
+				{#each PRODUCTS as { name, databaseId }, index (databaseId)}
+					<option value={index}>{name}</option>
+				{/each}
 			</select>
 			<div>
 				<LanguageSelector />
@@ -22,8 +37,9 @@
 	</div>
 
 	<div id="products">
-		<div id="catheters" class="product">Catheters</div>
-		<div id="sensors" class="product">Sensors</div>
+		{#each PRODUCTS as { name, databaseId }, index (databaseId)}
+			<Product {name} {databaseId} />
+		{/each}
 	</div>
 
 	<div id="author">Made by SturmEnte with ❤️</div>
