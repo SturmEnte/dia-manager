@@ -55,7 +55,7 @@
 
    <div id="products" bind:this={prodcuts}>
       {#each PRODUCTS as { name, databaseId }, index (databaseId)}
-         <Product {name} {databaseId} />
+         <Product {name} {databaseId} {index} />
       {/each}
    </div>
 
