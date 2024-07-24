@@ -1,43 +1,43 @@
 :root {
-	--background: #e7ecff;
-	--primary: #2589ff;
-	--secondary: #a5deff;
+   --background: #e7ecff;
+   --primary: #2589ff;
+   --secondary: #a5deff;
 }
 
 * {
-	font-family: "Montserrat", "Times New Roman";
+   font-family: "Montserrat", "Times New Roman";
 }
 
 /* Source: https://fonts.google.com/noto/specimen/Noto+Color+Emoji */
 @font-face {
-	font-family: "Noto Color Emoji";
-	src: url("/fonts/NotoColorEmoji-Regular.ttf");
+   font-family: "Noto Color Emoji";
+   src: url("/fonts/NotoColorEmoji-Regular.ttf");
 }
 
 /* Source: https://fonts.google.com/specimen/Montserrat */
 @font-face {
-	font-family: "Montserrat";
-	font-stretch: 0 100; /* Note that font-stretch is a % of normal width */
-	font-style: normal;
-	font-weight: 100 900;
-	src: url("/fonts/Montserrat-VariableFont_wght.ttf");
+   font-family: "Montserrat";
+   font-stretch: 0 100; /* Note that font-stretch is a % of normal width */
+   font-style: normal;
+   font-weight: 100 900;
+   src: url("/fonts/Montserrat-VariableFont_wght.ttf");
 }
 
 @font-face {
-	font-family: "Montserrat";
-	font-stretch: 0 100; /* Note that font-stretch is a % of normal width */
-	font-style: italic;
-	font-weight: 100 900;
-	src: url("/fonts/Montserrat-Italic-VariableFont_wght.ttf");
+   font-family: "Montserrat";
+   font-stretch: 0 100; /* Note that font-stretch is a % of normal width */
+   font-style: italic;
+   font-weight: 100 900;
+   src: url("/fonts/Montserrat-Italic-VariableFont_wght.ttf");
 }
 
 body {
-	margin: 0;
-	width: 100vw;
-	height: 100vh;
+   margin: 0;
+   width: 100vw;
+   height: 100vh;
 }
 
 #app {
-	width: 100vw;
-	height: 100vh;
+   width: 100vw;
+   height: 100vh;
 }

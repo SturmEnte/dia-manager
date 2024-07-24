@@ -1,5 +1,5 @@
 {
-	"password": {
-		"timeoutMillis": 1000
-	}
+   "password": {
+      "timeoutMillis": 1000
+   }
 }

@@ -1,8 +1,8 @@
 <script>
-	// Code from old language selector
-	// To be implemented
+   // Code from old language selector
+   // To be implemented
 
-	/*
+   /*
     const LANGUAGES = [
         {
             name: "en",
@@ -76,30 +76,30 @@
 </script>
 
 <main>
-	<select>
-		<option value="test">🏳️‍🌈</option>
-	</select>
+   <select>
+      <option value="test">🏳️‍🌈</option>
+   </select>
 </main>
 
 <style>
-	select {
-		background: var(--secondary);
-		height: var(--title-size);
-		width: var(--title-size);
+   select {
+      background: var(--secondary);
+      height: var(--title-size);
+      width: var(--title-size);
 
-		border-radius: 100%;
-		text-align: center;
-		cursor: pointer;
+      border-radius: 100%;
+      text-align: center;
+      cursor: pointer;
 
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		border: none;
-		font-size: calc(var(--title-size) * 0.6);
-	}
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: none;
+      font-size: calc(var(--title-size) * 0.6);
+   }
 
-	select,
-	option {
-		font-family: "Noto Color Emoji", sans-serif;
-	}
+   select,
+   option {
+      font-family: "Noto Color Emoji", sans-serif;
+   }
 </style>

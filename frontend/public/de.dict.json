@@ -1,10 +1,10 @@
 {
-	"_version": 1,
-	"name": "Name: ",
-	"ref": "REF-Nummer: ",
-	"lot": "LOT-Nummer: ",
-	"date-of-manufacture": "Herstellungsdatum: ",
-	"expiry-date": "Ablaufdatum: ",
-	"start-of-use": "Nutzungsstart: ",
-	"end-of-use": "Nutzungsende: "
+   "_version": 1,
+   "name": "Name: ",
+   "ref": "REF-Nummer: ",
+   "lot": "LOT-Nummer: ",
+   "date-of-manufacture": "Herstellungsdatum: ",
+   "expiry-date": "Ablaufdatum: ",
+   "start-of-use": "Nutzungsstart: ",
+   "end-of-use": "Nutzungsende: "
 }
