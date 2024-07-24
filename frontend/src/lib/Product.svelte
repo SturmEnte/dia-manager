@@ -9,4 +9,10 @@
 
 <main {databaseId} {hidden}>{name}</main>
 
-<style></style>
+<style>
+   main {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+   }
+</style>
