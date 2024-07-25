@@ -7,6 +7,8 @@ import pg from "pg";
 import setupDatabase from "./util/setupDatabase";
 import getLanguageFilePath from "./util/getLanguageFilePath";
 
+import deleteOldTokens from "./services/deleteOldTokens";
+
 import signup from "./routes/api/auth/signup";
 import login from "./routes/api/auth/login";
 
@@ -34,6 +36,9 @@ const WHITE_LIST = ["api", "login", "signup"];
    });
 
    await setupDatabase(client);
+
+   // Setup services
+   setInterval(() => deleteOldTokens(client, config), config.token_validity_check_interval_millis);
 
    const PATH_TO_PUBLIC_FOLDER = path.join(__dirname, config.publicLocation);
 
