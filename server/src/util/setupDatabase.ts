@@ -11,7 +11,7 @@ export default async function (client: Client) {
 				id SERIAL PRIMARY KEY,
 				username VARCHAR(${tablesConfig.users.maxUsernameLength}) NOT NULL UNIQUE,
 				password VARCHAR(${tablesConfig.users.maxPasswordLength}) NOT NULL,
-				created DATE NOT NULL
+				created TIMESTAMPTZ NOT NULL
 			);`
       );
    } catch (error) {
@@ -26,7 +26,7 @@ export default async function (client: Client) {
 				id SERIAL PRIMARY KEY,
 				user_id INT NOT NULL,
 				token VARCHAR(${tablesConfig.users.tokenLength}) NOT NULL,
-				created DATE NOT NULL
+				created TIMESTAMPTZ NOT NULL
 			);`
       );
    } catch (error) {

@@ -1,7 +1,6 @@
 import { Router, json } from "express";
 import { Client } from "pg";
 
-import formatDate from "../../../util/formatDate";
 import { hashString } from "../../../util/hashing";
 
 const userCredentials = require("../../../../configs/usercredentials.json");
@@ -60,7 +59,7 @@ router.post("/signup", async (req, res) => {
       }
 
       // Insert the new user into the database with the hashed password and current date
-      await client.query("INSERT INTO users (username, password, created) VALUES ($1, $2, $3)", [username, hashedPassword, formatDate(new Date())]);
+      await client.query("INSERT INTO users (username, password, created) VALUES ($1, $2, NOW())", [username, hashedPassword]);
 
       // Respond with a success message if the user was created successfully
       res.json({ message: "Created user" });

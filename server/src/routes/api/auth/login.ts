@@ -1,7 +1,6 @@
 import { Router, json } from "express";
 import { Client } from "pg";
 
-import formatDate from "../../../util/formatDate";
 import { hashString } from "../../../util/hashing";
 import generateValidAccessToken from "../../../util/generateValidAccessToken";
 
@@ -65,7 +64,7 @@ router.post("/login", async (req, res) => {
       }
 
       // Insert the newly generated access token with the user id and creation time/date into the database
-      await client.query(`INSERT INTO access_tokens (user_id, token, created) VALUES ($1, $2, $3)`, [user.id, accessToken, formatDate(new Date())]);
+      await client.query(`INSERT INTO access_tokens (user_id, token, created) VALUES ($1, $2, NOW())`, [user.id, accessToken]);
 
       // Respond with the new access token, if the processes before were successfull
       res.json({ token: accessToken });
