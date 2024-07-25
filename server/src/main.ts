@@ -66,18 +66,6 @@ const WHITE_LIST = ["api", "login", "signup"];
    app.use("/api/auth/", signup(client));
    app.use("/api/auth/", login(client));
 
-   // app.get("/", (req, res) => {
-   // 	res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "main/main.html"), req.cookies["language"]));
-   // });
-
-   // app.get("/login", (req, res) => {
-   // 	res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "login/login.html"), req.cookies["language"]));
-   // });
-
-   // app.get("/signup", (req, res) => {
-   // 	res.sendFile(getLanguageFilePath(path.join(__dirname, "public", "signup/signup.html"), req.cookies["language"]));
-   // });
-
    app.listen(process.env.PORT, () => {
       console.log("Listening on port " + process.env.PORT);
    });
