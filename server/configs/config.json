@@ -1,3 +1,5 @@
 {
-   "publicLocation": "../../frontend/dist"
+   "publicLocation": "../../frontend/dist",
+   "token_validity_millis": 10000,
+   "token_validity_check_interval_millis": 1000
 }
