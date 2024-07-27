@@ -8,6 +8,7 @@ from colorama import Back
 class MyHandler(FileSystemEventHandler):
     def __init__(self, ignore_list):
         self.ignore_list = ignore_list
+        print(f"{Back.BLUE} Looking for file changes...{Back.RESET}")
 
     def on_modified(self, event):
         if event.is_directory:
