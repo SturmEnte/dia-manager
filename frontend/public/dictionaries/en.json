@@ -2,7 +2,8 @@
    "_info": {
       "version": 1,
       "name": "English",
-      "icon": "/assets/icons/flasgs/gb.svg"
+      "icon": "/assets/icons/flasgs/gb.svg",
+      "emoji": "🇬🇧"
    },
    "authentication": {
       "login": "Login",
