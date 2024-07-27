@@ -1,0 +1,12 @@
+{
+   "_info": {
+      "version": 1,
+      "name": "English",
+      "icon": "/assets/icons/flasgs/gb.svg"
+   },
+   "authentication": {
+      "login": "Login",
+      "signup": "Signup",
+      "password": "Password"
+   }
+}
