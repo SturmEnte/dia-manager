@@ -1,11 +1,28 @@
 <script>
    import LogoutIconBlack from "../assets/icons/material/logout-black.svg";
+
+   function logout() {
+      const token = localStorage.getItem("token");
+
+      localStorage.removeItem("token");
+
+      // Try to delete the token from the database
+      // After that, load login page
+      fetch("/api/logout", {
+         method: "DELETE",
+         headers: {
+            Authorization: token,
+         },
+      }).finally((err) => {
+         window.location.href = "/#/login";
+      });
+   }
 </script>
 
 <div>
-   <a href="/logout" id="logout-link">
+   <div id="logout-link" on:click={logout}>
       <img src={LogoutIconBlack} alt="Logout" />
-   </a>
+   </div>
 </div>
 
 <style>
