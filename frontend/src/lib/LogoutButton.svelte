@@ -8,12 +8,12 @@
 
       // Try to delete the token from the database
       // After that, load login page
-      fetch("/api/logout", {
+      fetch("/api/auth/logout", {
          method: "DELETE",
          headers: {
             Authorization: token,
          },
-      }).finally((err) => {
+      }).finally(() => {
          window.location.href = "/#/login";
       });
    }

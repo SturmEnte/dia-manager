@@ -11,6 +11,7 @@ import deleteOldTokens from "./services/deleteOldTokens";
 
 import signup from "./routes/api/auth/signup";
 import login from "./routes/api/auth/login";
+import logout from "./routes/api/auth/logout";
 
 const config = require("../configs/config.json");
 
@@ -76,6 +77,7 @@ const WHITE_LIST = ["api", "login", "signup"];
 
    app.use("/api/auth/", signup(client));
    app.use("/api/auth/", login(client));
+   app.use("/api/auth/", logout(client));
 
    app.listen(process.env.PORT, () => {
       console.log("Listening on port " + process.env.PORT);
