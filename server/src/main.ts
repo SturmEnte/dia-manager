@@ -17,6 +17,7 @@ import logout from "./routes/api/auth/logout";
 const config = require("../configs/config.json");
 
 const WHITE_LIST = ["api", "login", "signup"];
+const API_WHITE_LIST = ["login", "signup"];
 
 (async () => {
    // Connect to database
@@ -71,6 +72,14 @@ const WHITE_LIST = ["api", "login", "signup"];
    });
 
    app.all("/api/*", async (req, res, next) => {
+      // Continue to api, if the endpoint is on the whitelist
+      for (let whiteListWord of WHITE_LIST) {
+         if (req.url.includes(whiteListWord)) {
+            next();
+            return;
+         }
+      }
+
       try {
          // Check if the token is valid with the function
          if (!(await isAccessTokenValid(client, config, req.headers.authorization))) {
