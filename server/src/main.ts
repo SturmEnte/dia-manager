@@ -73,7 +73,7 @@ const API_WHITE_LIST = ["login", "signup"];
 
    app.all("/api/*", async (req, res, next) => {
       // Continue to api, if the endpoint is on the whitelist
-      for (let whiteListWord of WHITE_LIST) {
+      for (let whiteListWord of API_WHITE_LIST) {
          if (req.url.includes(whiteListWord)) {
             next();
             return;
