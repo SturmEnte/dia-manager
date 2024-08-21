@@ -1,5 +1,5 @@
 <script>
-   // @ts-nocheck
+   export let dictionaryManager;
 
    let username;
    let password;
@@ -42,12 +42,12 @@
 </script>
 
 <main>
-   <label for="username">Username</label>
+   <label for="username">{dictionaryManager.getEntry("authentication", "username")}</label>
    <input bind:this={username} type="text" id="username" />
-   <label for="password">Password</label>
+   <label for="password">{dictionaryManager.getEntry("authentication", "password")}</label>
    <input bind:this={password} type="password" id="password" />
-   <button on:click={login}>Login</button>
-   <a href="/#/signup">Sign up</a>
+   <button on:click={login}>{dictionaryManager.getEntry("authentication", "login")}</button>
+   <a href="/#/signup">{dictionaryManager.getEntry("authentication", "signup")}</a>
    <div bind:this={error} id="error"></div>
 </main>
 
