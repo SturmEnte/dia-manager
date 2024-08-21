@@ -28,7 +28,7 @@
             return;
          }
 
-         localStorage.setItem("token", body.access_token);
+         localStorage.setItem("token", body.token);
          document.cookie = "loggedIn=true;path=/";
 
          error.innerText = "Success. Redirecting shortly...";

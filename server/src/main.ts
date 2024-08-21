@@ -68,6 +68,12 @@ const WHITE_LIST = ["api", "login", "signup"];
       res.sendFile(path.join(PATH_TO_PUBLIC_FOLDER, "index.html"));
    });
 
+   app.all("/api/*", (req, res, next) => {
+      console.log(req.headers.authorization);
+
+      next();
+   });
+
    app.use("/api/auth/", signup(client));
    app.use("/api/auth/", login(client));
 
