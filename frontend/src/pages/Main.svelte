@@ -4,6 +4,8 @@
    import LanguageSelector from "../lib/LanguageSelector.svelte";
    import Product from "../lib/Product.svelte";
 
+   export let dictionaryManager;
+
    // The available products
    // This hard coded list can later be replaced with a custom system
    const PRODUCTS = [
