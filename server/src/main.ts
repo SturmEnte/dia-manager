@@ -6,6 +6,7 @@ import pg from "pg";
 
 import setupDatabase from "./util/setupDatabase";
 import getLanguageFilePath from "./util/getLanguageFilePath";
+import isAccessTokenValid from "./util/isAccessTokenValid";
 
 import deleteOldTokens from "./services/deleteOldTokens";
 
@@ -69,9 +70,21 @@ const WHITE_LIST = ["api", "login", "signup"];
       res.sendFile(path.join(PATH_TO_PUBLIC_FOLDER, "index.html"));
    });
 
-   app.all("/api/*", (req, res, next) => {
-      console.log(req.headers.authorization);
+   app.all("/api/*", async (req, res, next) => {
+      try {
+         // Check if the token is valid with the function
+         if (!(await isAccessTokenValid(client, config, req.headers.authorization))) {
+            // Respond with an user error if the token is invalid
+            res.status(400).json({ error: "Invalid access token" });
+            return;
+         }
+      } catch (error) {
+         // Respond with an internal server error if the check fails
+         console.error("Error during login process", error);
+         res.status(500).json({ error: "Internal server error" });
+      }
 
+      // Continue to api if the token is valid
       next();
    });
 
