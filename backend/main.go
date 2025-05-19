@@ -1,19 +1,15 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"dia-manager-backend/config"
+	"dia-manager-backend/router"
 )
 
 func main() {
-    router := gin.Default()
 
-    router.GET("/hello", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{
-            "message": "Hello from your Go backend!",
-        })
-    })
+    cfg := config.Load()
 
-    router.Run(":8369")
+    r := router.SetupRouter(cfg)
+
+    r.Run(":" + cfg.ServerPort)
 }
