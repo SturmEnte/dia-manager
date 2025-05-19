@@ -6,8 +6,9 @@ import (
 )
 
 func main() {
-
     cfg := config.Load()
+
+    config.ConnectPostgres(cfg.DatabaseUri)
 
     r := router.SetupRouter(cfg)
 
