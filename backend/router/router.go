@@ -2,17 +2,19 @@ package router
 
 import (
 	"dia-manager-backend/config"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	authHandler "dia-manager-backend/handler/auth"
 )
 
 func SetupRouter(cfg *config.Config) *gin.Engine {
     r := gin.Default()
 
-	r.GET("/hello", func (c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"msg": "World"})
-	})
+	auth := r.Group("/auth")
+	{
+		auth.POST("/register", authHandler.Register)
+	}
 
     return r
 }
