@@ -15,13 +15,15 @@ func Register(c *gin.Context) {
         return
     }
 
-    token, err := auth.Register(req.Username, req.Password)
+    id, err := auth.CreateUser(req.Username, req.Password)
 
     if err != nil {
 		println(err.Error())
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register"})
         return
     }
+
+    token, err := auth.CreateToken(id)
 
     c.JSON(http.StatusOK, gin.H{"token": token})
 }
