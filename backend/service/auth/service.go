@@ -2,9 +2,13 @@ package auth
 
 import (
 	"context"
+	"errors"
+	"time"
+
 	"dia-manager-backend/config"
 	"dia-manager-backend/utils"
-	"errors"
+
+	"github.com/dchest/uniuri"
 )
 
 func CreateUser(username string, password string) (string, error) {
@@ -29,5 +33,18 @@ func CreateUser(username string, password string) (string, error) {
 }
 
 func CreateToken(id string) (string, error) {
-    return "", nil
+
+    token := uniuri.NewLen(40)
+    expiresAt := time.Now().Add(5 * time.Minute).UTC()
+
+    var dummy int
+
+    err := config.DB.QueryRow(context.Background(), `INSERT INTO sessions (token, user_id, expires) VALUES ($1, $2, $3)`, token, id, expiresAt).Scan(&dummy)
+
+    if err != nil && err.Error() != "no rows in result set" {
+        println(err.Error())
+        return "", errors.New("failed to insert session token")
+    }
+
+    return token, nil
 }

@@ -25,5 +25,11 @@ func Register(c *gin.Context) {
 
     token, err := auth.CreateToken(id)
 
+    if err != nil {
+        println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to create token"})
+        return
+    }
+
     c.JSON(http.StatusOK, gin.H{"token": token})
 }
