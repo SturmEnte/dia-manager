@@ -12,5 +12,6 @@ func main() {
 
     scheduler.StartScheduler()
 
+    r := router.SetupRouter()
     r.Run(":" + cfg.ServerPort)
 }
