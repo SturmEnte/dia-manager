@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     username VARCHAR(255) UNIQUE NOT NULL,
@@ -16,8 +18,8 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 CREATE TABLE IF NOT EXISTS catheters (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    started TIMESTAMPTZ NOT NULL,
-    stopped TIMESTAMPTZ DEFAULT NULL,
-    CHECK (stopped IS NULL OR stopped > started),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    started_at TIMESTAMPTZ NOT NULL,
+    ended_at TIMESTAMPTZ DEFAULT NULL,
+    CHECK (ended_at IS NULL OR ended_at > started_at)
 );
