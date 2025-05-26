@@ -47,7 +47,24 @@ func GetCatheterByID(c *gin.Context) {
 }
 
 func UpdateCatheter(c *gin.Context) {
-    c.JSON(http.StatusNotImplemented, gin.H{})
+    var req UpdateCatheterRequest
+
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    catheterId := c.Param("id")
+
+    err := catheterService.UpdateCatheter(catheterId, req.Start, req.End)
+
+    if err != nil && err.Error() != "nothing to update" {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while updating catheter"})
+        return
+    }
+
+    c.Status(http.StatusNoContent)
 }
 
 func DeleteCatheter(c *gin.Context) {
