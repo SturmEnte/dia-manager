@@ -19,11 +19,7 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (str
 		println("endedAt is nil")
 	}
 
-	if endedAt != nil {
-		err = config.DB.QueryRow(context.Background(), `INSERT INTO catheters (user_id, started_at, ended_at) VALUES ($1, $2, $3) RETURNING id`, userId, startedAt, endedAt).Scan(&id)
-	} else {
-		err = config.DB.QueryRow(context.Background(), `INSERT INTO catheters (user_id, started_at) VALUES ($1, $2) RETURNING id`, userId, startedAt).Scan(&id)
-	}
+	err = config.DB.QueryRow(context.Background(), `INSERT INTO catheters (user_id, started_at, ended_at) VALUES ($1, $2, $3) RETURNING id`, userId, startedAt, endedAt).Scan(&id)
 	
 	if err != nil {
 	    println(err.Error())
