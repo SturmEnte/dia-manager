@@ -68,5 +68,16 @@ func UpdateCatheter(c *gin.Context) {
 }
 
 func DeleteCatheter(c *gin.Context) {
-    c.JSON(http.StatusNotImplemented, gin.H{})
+
+    catheterId := c.Param("id")
+
+    err := catheterService.DeleteCatheter(catheterId)
+
+    if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while deleting catheter"})
+        return
+    }
+
+    c.Status(http.StatusOK)
 }

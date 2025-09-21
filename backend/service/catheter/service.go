@@ -61,3 +61,17 @@ func UpdateCatheter(catheterId string, startedAt *time.Time, endedAt *time.Time)
 
 	return nil
 }
+
+func DeleteCatheter(catheterId string) (error) {
+
+	var dummy int
+
+	err := config.DB.QueryRow(context.Background(), `DELETE FROM catheters WHERE id=$1`, catheterId).Scan(&dummy)
+	
+	if err != nil && err.Error() != "no rows in result set" {
+	    println(err.Error())
+	    return errors.New("failed to insert the new user into the database")
+	}
+
+	return nil
+}
