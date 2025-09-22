@@ -49,6 +49,14 @@ func GetCatheterByID(c *gin.Context) {
 func UpdateCatheter(c *gin.Context) {
     var req UpdateCatheterRequest
 
+    userId, err := utils.GetUserIdByToken(c.GetHeader("Authorization"))
+
+    if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating catheter"})
+        return
+    }
+
     if err := c.ShouldBindJSON(&req); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
@@ -56,7 +64,7 @@ func UpdateCatheter(c *gin.Context) {
 
     catheterId := c.Param("id")
 
-    err := catheterService.UpdateCatheter(catheterId, req.Start, req.End)
+    err = catheterService.UpdateCatheter(userId, catheterId, req.Start, req.End)
 
     if err != nil && err.Error() != "nothing to update" {
         log.Println(err.Error())
@@ -71,7 +79,15 @@ func DeleteCatheter(c *gin.Context) {
 
     catheterId := c.Param("id")
 
-    err := catheterService.DeleteCatheter(catheterId)
+    userId, err := utils.GetUserIdByToken(c.GetHeader("Authorization"))
+
+    if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating catheter"})
+        return
+    }
+
+    err = catheterService.DeleteCatheter(userId, catheterId)
 
     if err != nil {
         log.Println(err.Error())

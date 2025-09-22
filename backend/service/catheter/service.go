@@ -22,7 +22,7 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (str
 	return id, nil
 }
 
-func UpdateCatheter(catheterId string, startedAt *time.Time, endedAt *time.Time) (error) {
+func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time) (error) {
 
 	query := "UPDATE catheters SET"
 	args := []interface{}{}
@@ -46,10 +46,11 @@ func UpdateCatheter(catheterId string, startedAt *time.Time, endedAt *time.Time)
 		return errors.New("nothing to update")
 	}
 
-	args = append(args, catheterId)
-	query += " WHERE id=$" + strconv.Itoa(id)
+	// Missing not found error
 
-	println(query)
+	args = append(args, catheterId)
+	args = append(args, userId)
+	query += " WHERE id=$" + strconv.Itoa(id) + " AND user_id=$" + strconv.Itoa(id + 1) 
 
 	var dummy int
 	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&dummy)
@@ -62,12 +63,14 @@ func UpdateCatheter(catheterId string, startedAt *time.Time, endedAt *time.Time)
 	return nil
 }
 
-func DeleteCatheter(catheterId string) (error) {
+func DeleteCatheter(userId string, catheterId string) (error) {
 
 	var dummy int
 
-	err := config.DB.QueryRow(context.Background(), `DELETE FROM catheters WHERE id=$1`, catheterId).Scan(&dummy)
+	err := config.DB.QueryRow(context.Background(), `DELETE FROM catheters WHERE id=$1 AND user_id=$2`, catheterId, userId).Scan(&dummy)
 	
+	// Missing not found error
+
 	if err != nil && err.Error() != "no rows in result set" {
 	    println(err.Error())
 	    return errors.New("failed to insert the new user into the database")
