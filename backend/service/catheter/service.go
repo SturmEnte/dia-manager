@@ -66,7 +66,7 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 
 func GetCatheters(userId string) ([]models.Catheter, error) {
 	
-	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1 ORDER BY started_at DESC`, userId)
+	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1`, userId)
 	
 	if err != nil {
 		println(err.Error())
