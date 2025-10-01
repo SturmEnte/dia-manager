@@ -34,7 +34,8 @@ func Register(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"token": token})
+    c.SetCookie("token", token, 3600, "/", "", false, true)
+    c.Status(http.StatusOK)
 }
 
 func Login(c *gin.Context) {
@@ -69,5 +70,6 @@ func Login(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"token": token})
+    c.SetCookie("token", token, 3600, "/", "", false, true)
+    c.Status(http.StatusOK)
 }

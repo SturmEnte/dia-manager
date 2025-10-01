@@ -13,20 +13,24 @@ import (
 func AuthMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         
-        token := c.GetHeader("Authorization")
+        token, err := c.Cookie("token")
 
-        if token == "" {
-            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-            return
-        }
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error while checking token validity"})
+			println(err)
+			return
+		}
         
 		var expires time.Time
-		config.DB.QueryRow(context.Background(), "SELECT expires FROM sessions WHERE token=$1", token).Scan(&expires)
+		var userId string
+		config.DB.QueryRow(context.Background(), "SELECT expires, user_id FROM sessions WHERE token=$1", token).Scan(&expires, &userId)
 
 		if expires.UnixMilli() <= time.Now().UnixMilli() {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
             return
 		}
+
+		c.Set("userId", userId)
 
         c.Next()
     }
