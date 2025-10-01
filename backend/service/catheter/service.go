@@ -3,6 +3,7 @@ package catheter
 import (
 	"context"
 	"dia-manager-backend/config"
+	"dia-manager-backend/models"
 	"errors"
 	"strconv"
 	"time"
@@ -61,6 +62,44 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 	}
 
 	return nil
+}
+
+func GetCatheters(userId string) ([]models.Catheter, error) {
+	
+	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1 ORDER BY started_at DESC`, userId)
+	
+	if err != nil {
+		println(err.Error())
+		return nil, errors.New("failed to query catheters from the database")
+	}
+	
+	defer rows.Close()
+
+	// Create a slice to store the catheters
+	var catheters []models.Catheter
+
+	for rows.Next() {
+		var catheter models.Catheter
+		
+		// Scan the row data into the catheter struct
+		err := rows.Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+		
+		if err != nil {
+			println(err.Error())
+			return nil, errors.New("failed to scan catheter row")
+		}
+		
+		// Append the catheter to the slice
+		catheters = append(catheters, catheter)
+	}
+
+	// Check for any errors that occurred during iteration
+	if err := rows.Err(); err != nil {
+		println(err.Error())
+		return nil, errors.New("error occurred while iterating through catheter rows")
+	}
+
+	return catheters, nil
 }
 
 func DeleteCatheter(userId string, catheterId string) (error) {
