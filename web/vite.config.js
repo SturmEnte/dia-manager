@@ -4,6 +4,15 @@ import { resolve } from "path";
 
 export default defineConfig({
 	plugins: [vue()],
+	server: {
+		proxy: {
+			"/api": {
+				target: "http://localhost:8369",
+				changeOrigin: true,
+				rewrite: (p) => p.replace(/^\/api/, ""),
+			},
+		},
+	},
 	build: {
 		rollupOptions: {
 			input: {
