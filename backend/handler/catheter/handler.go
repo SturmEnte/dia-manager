@@ -60,7 +60,26 @@ func GetCatheters(c *gin.Context) {
 }
 
 func GetCatheterByID(c *gin.Context) {
-    c.JSON(http.StatusNotImplemented, gin.H{})
+
+    catheterId := c.Param("id")
+
+    userId, err := utils.GetUserIdByToken(c.GetHeader("Authorization"))
+
+    if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting catheter"})
+        return
+    }
+
+    catheter, err := catheterService.GetCatheter(userId, catheterId)
+
+    if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting catheter"})
+        return
+    }
+
+    c.JSON(http.StatusFound, catheter)
 }
 
 func UpdateCatheter(c *gin.Context) {

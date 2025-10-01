@@ -64,6 +64,26 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 	return nil
 }
 
+func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
+    
+    var catheter models.Catheter
+
+    err := config.DB.QueryRow(context.Background(), 
+        `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id=$1 AND id=$2`, 
+        userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+
+    if err != nil {
+        if err.Error() == "no rows in result set" {
+            // Return zero value for struct when not found
+            return models.Catheter{}, errors.New("catheter not found")
+        }
+        println(err.Error())
+        return models.Catheter{}, errors.New("failed to retrieve catheter from database")
+    }
+
+    return catheter, nil
+}
+
 func GetCatheters(userId string) ([]models.Catheter, error) {
 	
 	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1`, userId)
