@@ -44,7 +44,7 @@ func GetCatheters(c *gin.Context) {
 
     if err != nil {
         log.Println(err.Error())
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating catheter"})
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting catheters"})
         return
     }
 
