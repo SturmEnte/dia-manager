@@ -25,6 +25,11 @@ func AuthMiddleware() gin.HandlerFunc {
 		var userId string
 		config.DB.QueryRow(context.Background(), "SELECT expires, user_id FROM sessions WHERE token=$1", token).Scan(&expires, &userId)
 
+		if userId == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			return
+		}
+
 		if expires.UnixMilli() <= time.Now().UnixMilli() {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
             return
