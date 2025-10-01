@@ -79,7 +79,7 @@ func GetCatheterByID(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusFound, catheter)
+    c.JSON(http.StatusOK, catheter)
 }
 
 func UpdateCatheter(c *gin.Context) {
