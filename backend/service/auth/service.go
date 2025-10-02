@@ -37,7 +37,7 @@ func CreateToken(id string, username string) (string, error) {
     claims := jwt.MapClaims{
         "user_id":  id,
         "username": username,
-        "exp":     time.Now().Add(time.Duration(config.Load().TokenLifetime) * time.Second).Unix(), // DONT LOAD CONFIG HERE
+        "exp":     time.Now().Add(time.Duration(config.Load().TokenLifetime) * time.Minute).Unix(), // DONT LOAD CONFIG HERE
         "iat":      time.Now().Unix(),
     }
 
