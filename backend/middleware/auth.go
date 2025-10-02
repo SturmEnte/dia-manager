@@ -1,11 +1,10 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 
 	"dia-manager-backend/config"
 )
@@ -21,21 +20,43 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
         
-		var expires time.Time
-		var userId string
-		config.DB.QueryRow(context.Background(), "SELECT expires, user_id FROM sessions WHERE token=$1", token).Scan(&expires, &userId)
+		// TODO: Check if token is marked as invalid in db (logged out)
 
-		if userId == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
-			return
-		}
+		// Parse and validate JWT
+        jwtToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+            // Make sure token method is HMAC
+            if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+                return nil, jwt.ErrSignatureInvalid
+            }
 
-		if expires.UnixMilli() <= time.Now().UnixMilli() {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token expired"})
+            // Return secret key for validation
+            return []byte(config.Load().TokenSecret), nil
+        })
+
+        if err != nil {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			println(err)
             return
-		}
+        }
 
-		c.Set("userId", userId)
+        // Check if token is valid and extract claims
+        if claims, ok := jwtToken.Claims.(jwt.MapClaims); ok && jwtToken.Valid {
+            // Extract user information from claims
+            userId, userIdExists := claims["user_id"].(string)
+            username, usernameExists := claims["username"].(string)
+            
+            if !userIdExists || !usernameExists {
+                c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+                return
+            }
+
+            // Set user information in context for use in handlers
+            c.Set("userId", userId)
+            c.Set("username", username)
+        } else {
+            c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+            return
+        }
 
         c.Next()
     }
