@@ -4,6 +4,7 @@
 	<div>
 		<nav>
 			<router-link to="/">Dashboard</router-link>
+			<router-link to="/catheters">Katheter</router-link>
 		</nav>
 		<main>
 			<router-view />
