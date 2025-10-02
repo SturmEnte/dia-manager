@@ -9,6 +9,7 @@ type Config struct {
     ServerPort string
     DatabaseUri string
     TokenLifetime int
+    TokenSecret string
 }
 
 func Load() *Config {
@@ -24,6 +25,7 @@ func Load() *Config {
         ServerPort: getEnv("PORT", "8369"),
         DatabaseUri: getEnv("DATABASE_URI", "postgres://test:test@localhost:5432/testdb?sslmode=disable"),
         TokenLifetime: tokenLifetime,
+        TokenSecret: getEnv("TOKEN_SECRET", "1234"),
     }
 }
 
