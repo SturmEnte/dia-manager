@@ -8,7 +8,7 @@ import (
 	"dia-manager-backend/config"
 	"dia-manager-backend/utils"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/dchest/uniuri"
 )
 
 func CreateUser(username string, password string) (string, error) {
@@ -32,24 +32,19 @@ func CreateUser(username string, password string) (string, error) {
     return id, nil
 }
 
-func CreateToken(id string, username string) (string, error) {
+func CreateToken(id string) (string, error) {
 
-    claims := jwt.MapClaims{
-        "user_id":  id,
-        "username": username,
-        "exp":     time.Now().Add(time.Duration(config.Load().TokenLifetime) * time.Minute).Unix(), // DONT LOAD CONFIG HERE
-        "iat":      time.Now().Unix(),
-    }
+    token := uniuri.NewLen(40)
+    expiresAt := time.Now().Add(5 * time.Minute).UTC()
 
-    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    var dummy int
 
-    secretKey := []byte(config.Load().TokenSecret) // DONT LOAD CONFIG HERE
-    tokenString, err := token.SignedString(secretKey)
-    
-    if err != nil {
+    err := config.DB.QueryRow(context.Background(), `INSERT INTO sessions (token, user_id, expires) VALUES ($1, $2, $3)`, token, id, expiresAt).Scan(&dummy)
+
+    if err != nil && err.Error() != "no rows in result set" {
         println(err.Error())
-        return "", errors.New("failed to create JWT token")
+        return "", errors.New("failed to insert session token")
     }
 
-    return tokenString, nil
+    return token, nil
 }
