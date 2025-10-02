@@ -16,7 +16,6 @@ func SetupRouter() *gin.Engine {
 	{
 		auth.POST("/register", authHandler.Register)
 		auth.POST("/login", authHandler.Login)
-		auth.DELETE("/logout", authHandler.Logout)
 	}
 
 	// Check if request has authorization token if the request was not matched by the auth group
