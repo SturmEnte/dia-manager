@@ -2,10 +2,17 @@
 <html lang="de">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Register</title>
+		<title>Registrieren</title>
 	</head>
 	<body>
-		<div id="app"></div>
-		<script type="module" src="/src/public/register.js"></script>
+		<div id="app">
+			<form>
+				<input type="text" id="username" placeholder="Benutzername" />
+				<input type="text" id="password" placeholder="Passwort" />
+				<input type="submit" value="Registrieren" />
+			</form>
+			<a href="/login">Einloggen</a>
+		</div>
+		<script src="/src/public/register.js"></script>
 	</body>
 </html>
