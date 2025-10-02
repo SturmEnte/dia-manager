@@ -73,3 +73,8 @@ func Login(c *gin.Context) {
     c.SetCookie("token", token, 3600, "/", "", false, true)
     c.Status(http.StatusOK)
 }
+
+func Logout(c *gin.Context) {
+    // TODO: Add token to invalid tokens in db
+    c.Status(http.StatusNotImplemented)
+}
