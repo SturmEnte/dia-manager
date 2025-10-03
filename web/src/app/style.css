@@ -1,0 +1,25 @@
+:root {
+	--col-1: white;
+	--col-2: #82a3ff;
+	--col-font: #ffffff;
+	--col-accent: #d7ffe9;
+
+	--radius: 15px;
+
+	--padding: 15px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: var(--col-1);
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	color: var(--col-font);
+}
+
+#app {
+	padding: var(--padding);
+}
