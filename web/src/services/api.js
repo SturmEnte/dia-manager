@@ -23,8 +23,20 @@ class DiaManagerAPIService {
 		return res;
 	}
 
+	// User
 	async getUserData() {
 		const res = await this.request("/user/me");
+
+		if (!res) return;
+
+		const data = await res.json();
+
+		return data;
+	}
+
+	// Catheter
+	async getCatheters() {
+		const res = await this.request("/catheters/");
 
 		if (!res) return;
 
