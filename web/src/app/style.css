@@ -23,3 +23,9 @@ body {
 #app {
 	padding: var(--padding);
 }
+
+.window {
+	background: var(--col-2);
+	border-radius: var(--radius);
+	padding: var(--padding);
+}

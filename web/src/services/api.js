@@ -1,5 +1,5 @@
 class DiaManagerAPIService {
-	constructor(basePath = "/api/") {
+	constructor(basePath = "/api") {
 		this.basePath = basePath;
 	}
 
@@ -36,13 +36,13 @@ class DiaManagerAPIService {
 
 	// Catheter
 	async getCatheters() {
-		const res = await this.request("/catheters/");
+		const res = await this.request("/catheters");
 
-		if (!res) return;
+		if (!res) return [];
 
 		const data = await res.json();
 
-		return data;
+		return data.catheters;
 	}
 }
 

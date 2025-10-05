@@ -41,6 +41,7 @@ onMounted(async () => {
 	background: var(--col-2);
 	border-radius: var(--radius);
 	padding: var(--padding);
+	margin-bottom: var(--padding);
 
 	width: calc(100vw - 2 * var(--padding));
 
