@@ -17,7 +17,7 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div>
+	<div id="app-container">
 		<div id="header">
 			<div id="left-h">
 				<div id="app-name">DiaManager</div>
@@ -37,6 +37,12 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+#app-container {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - 2 * var(--padding));
+}
+
 #header {
 	background: var(--col-2);
 	border-radius: var(--radius);
@@ -77,5 +83,9 @@ onMounted(async () => {
 #username {
 	color: var(--col-accent);
 	font-style: italic;
+}
+
+main {
+	flex: 1;
 }
 </style>

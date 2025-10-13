@@ -18,10 +18,12 @@ body {
 	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--col-font);
+	height: 100vh;
 }
 
 #app {
 	padding: var(--padding);
+	height: 100vh;
 }
 
 .window {
