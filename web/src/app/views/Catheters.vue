@@ -15,7 +15,7 @@ onMounted(async () => {
 	<div id="main">
 		<div id="history" class="window">
 			<div class="title">Historie</div>
-			<div id="catheters"><Catheter v-for="catheter in catheters" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" /></div>
+			<div id="catheters" class="scrollbar"><Catheter v-for="catheter in catheters" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" /></div>
 		</div>
 		<div id="create" class="window"></div>
 	</div>
@@ -28,7 +28,7 @@ onMounted(async () => {
 	height: 100%;
 }
 
-#main #history {
+#history {
 	flex: 2;
 	margin-right: calc(var(--padding) / 2);
 	height: 100%;
@@ -36,7 +36,16 @@ onMounted(async () => {
 	flex-direction: column;
 }
 
-#main #create {
+.title {
+	margin-bottom: var(--padding);
+}
+
+#catheters {
+	flex: 1;
+	overflow-y: auto;
+}
+
+#create {
 	flex: 1;
 	margin-left: calc(var(--padding) / 2);
 }

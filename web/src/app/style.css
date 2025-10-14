@@ -1,6 +1,7 @@
 :root {
 	--col-1: white;
 	--col-2: #82a3ff;
+	--col-3: #6b8ae6;
 	--col-font: #ffffff;
 	--col-accent: #d7ffe9;
 
@@ -11,6 +12,7 @@
 
 * {
 	box-sizing: border-box;
+	overflow: hidden;
 }
 
 body {
@@ -30,4 +32,22 @@ body {
 	background: var(--col-2);
 	border-radius: var(--radius);
 	padding: var(--padding);
+}
+
+.scrollbar::-webkit-scrollbar {
+	width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+	background: var(--col-3);
+	border-radius: var(--radius);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+	background: var(--col-accent);
+	border-radius: var(--radius);
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+	background: var(--col-accent);
 }
