@@ -33,9 +33,9 @@ function formatDate(value) {
 }
 
 function formatDuration(start, end) {
-	if (!start) return "-";
+	if (!(start && end)) return "-";
 	const startDate = start instanceof Date ? start : new Date(start);
-	const endDate = end ? (end instanceof Date ? end : new Date(end)) : new Date();
+	const endDate = end instanceof Date ? end : new Date(end);
 
 	// Check if the date was defined successfully
 	if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return "-";
