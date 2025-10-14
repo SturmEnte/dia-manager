@@ -44,6 +44,27 @@ class DiaManagerAPIService {
 
 		return data.catheters;
 	}
+
+	async createCatheter(start, end) {
+		let catheter = { startedAt: new Date(start).toISOString() };
+
+		if (end) catheter.endedAt = new Date(end).toISOString();
+
+		const res = await this.request("/catheters", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(catheter),
+		});
+
+		if (!res) return;
+
+		if (res.status === 201) {
+			const id = await res.json().id;
+			return { id, startedAt: start, endedAt: end };
+		}
+	}
 }
 
 const api = new DiaManagerAPIService();
