@@ -4,10 +4,15 @@ import api from "../../services/api";
 
 import Catheter from "../components/Catheter.vue";
 
-const catheters = ref([]);
+const cathetersObj = ref([]);
 
 onMounted(async () => {
-	catheters.value = await api.getCatheters();
+	let catheters = await api.getCatheters();
+
+	// Sort by date descending
+	catheters.sort((a, b) => new Date(b.startedAt) - new Date(a.startedAt));
+
+	cathetersObj.value = catheters;
 });
 
 // Create new entry
@@ -24,7 +29,7 @@ async function createCatheter() {
 	}
 
 	// Add new catheter to the catheters at the first position
-	catheters.value.unshift(newCatheter);
+	cathetersObj.value.unshift(newCatheter);
 
 	// Reset form fields
 	start.value = "";
@@ -37,7 +42,7 @@ async function createCatheter() {
 		<div id="history" class="window">
 			<div class="title">Historie</div>
 			<div id="catheters" class="scrollbar">
-				<Catheter class="catheter" v-for="catheter in catheters" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" />
+				<Catheter class="catheter" v-for="catheter in cathetersObj" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" />
 			</div>
 		</div>
 		<div id="create" class="window">
