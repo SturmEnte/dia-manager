@@ -51,7 +51,7 @@ function removeCatheter(id) {
 		</div>
 		<div id="create" class="window">
 			<div class="title">Neuen Katheter eintragen</div>
-			<form id="create-form" @submit.prevent="createCatheter">
+			<form id="create-form" class="form" @submit.prevent="createCatheter">
 				<label for="start">Start</label>
 				<input id="start" name="start" type="datetime-local" required v-model="start" />
 				<label for="end">Ende</label>
@@ -94,5 +94,16 @@ function removeCatheter(id) {
 #create {
 	flex: 1;
 	margin-left: calc(var(--padding) / 2);
+}
+
+#create-form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+#create-form label {
+	font-size: 0.9rem;
+	margin-bottom: -5px;
 }
 </style>

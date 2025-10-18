@@ -71,8 +71,8 @@ async function deleteCatheter() {
 
 			<!-- Edit catheter -->
 			<div class="side" v-if="editMode">
-				<div><span class="attr-title">Gestartet:</span> <input type="datetime-local" v-model="start" /></div>
-				<div><span class="attr-title">Beendet:</span> <input type="datetime-local" v-model="end" :min="start || undefined" /></div>
+				<div><span class="attr-title">Gestartet:</span> <input class="form-input" type="datetime-local" v-model="start" /></div>
+				<div><span class="attr-title">Beendet:</span> <input class="form-input" type="datetime-local" v-model="end" :min="start || undefined" /></div>
 			</div>
 			<div class="side" v-if="editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(start, end) }}</div>
@@ -88,7 +88,7 @@ async function deleteCatheter() {
 	</div>
 </template>
 
-<style>
+<style scoped>
 .catheter-container {
 	position: relative;
 	display: flex;
@@ -109,6 +109,10 @@ async function deleteCatheter() {
 
 .attr-title {
 	font-weight: 600;
+}
+
+.form-input {
+	background: var(--col-2);
 }
 
 .buttons {
