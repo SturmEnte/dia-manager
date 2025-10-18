@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import api from "../../services/api";
 
 const props = defineProps({
 	id: {
@@ -42,7 +43,10 @@ function toggleEditmode() {
 	editMode.value = !editMode.value;
 }
 
-function saveChanges() {}
+async function saveChanges() {
+	await api.updateCatheter(props.id, start.value, end.value);
+	editMode.value = false;
+}
 
 function deleteCatheter() {}
 </script>
@@ -62,7 +66,7 @@ function deleteCatheter() {}
 			<!-- Edit catheter -->
 			<div class="side" v-if="editMode">
 				<div><span class="attr-title">Gestartet:</span> <input type="datetime-local" v-model="start" /></div>
-				<div><span class="attr-title">Beendet:</span> <input type="datetime-local" v-model="end" /></div>
+				<div><span class="attr-title">Beendet:</span> <input type="datetime-local" v-model="end" :min="start || undefined" /></div>
 			</div>
 			<div class="side" v-if="editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(start, end) }}</div>
@@ -70,7 +74,7 @@ function deleteCatheter() {}
 			</div>
 		</div>
 		<div class="buttons" v-if="editMode">
-			<button @click="saveChanged">Save</button>
+			<button @click="saveChanges">Save</button>
 			<button @click="deleteCatheter">Delete</button>
 		</div>
 		<!-- <div class="catheter" v-if="editMode"></div> -->

@@ -14,6 +14,12 @@ class DiaManagerAPIService {
 			return;
 		}
 
+		if (res.status >= 400) {
+			// TODO: Change with cleaner info thingy
+			alert("User error");
+			return;
+		}
+
 		if (res.status >= 500) {
 			// TODO: Change with cleaner info thingy
 			alert("Server side error while requesting data");
@@ -62,6 +68,27 @@ class DiaManagerAPIService {
 
 		if (res.status === 201) {
 			const id = await res.json().id;
+			return { id, startedAt: start, endedAt: end };
+		}
+	}
+
+	// id and start are required, end is optional
+	async updateCatheter(id, start, end) {
+		let catheter = { startedAt: new Date(start).toISOString() };
+
+		if (end) catheter.endedAt = new Date(end).toISOString();
+
+		const res = await this.request("/catheters/" + id, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(catheter),
+		});
+
+		if (!res) return;
+
+		if (res.status === 204) {
 			return { id, startedAt: start, endedAt: end };
 		}
 	}
