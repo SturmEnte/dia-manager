@@ -18,14 +18,41 @@ const props = defineProps({
 
 let editMode = ref();
 editMode.value = false;
+
+let start = ref();
+let end = ref();
+
+start.value = formatDateTimeLocal(props.startedAt);
+end.value = formatDateTimeLocal(props.endedAt);
+
+// Data before edit mode is entered
+let oldStart;
+let oldEnd;
+
+// Toggle edit mode and discard unsaved changes
+function toggleEditmode() {
+	if (editMode.value) {
+		start.value = oldStart;
+		end.value = oldEnd;
+	} else {
+		oldStart = start.value;
+		oldEnd = end.value;
+	}
+
+	editMode.value = !editMode.value;
+}
+
+function saveChanges() {}
+
+function deleteCatheter() {}
 </script>
 
 <template>
 	<div class="catheter-container">
 		<div class="catheter">
 			<div class="side" v-if="!editMode">
-				<div><span class="attr-title">Gestartet:</span> {{ formatDate(props.startedAt) }}</div>
-				<div><span class="attr-title">Beendet:</span> {{ formatDate(props.endedAt) }}</div>
+				<div><span class="attr-title">Gestartet:</span> {{ formatDate(start) }}</div>
+				<div><span class="attr-title">Beendet:</span> {{ formatDate(end) }}</div>
 			</div>
 			<div class="side" v-if="!editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
@@ -34,20 +61,20 @@ editMode.value = false;
 
 			<!-- Edit catheter -->
 			<div class="side" v-if="editMode">
-				<div><span class="attr-title">Gestartet:</span> {{ formatDate(props.startedAt) }}</div>
-				<div><span class="attr-title">Beendet:</span> {{ formatDate(props.endedAt) }}</div>
+				<div><span class="attr-title">Gestartet:</span> <input type="datetime-local" v-model="start" /></div>
+				<div><span class="attr-title">Beendet:</span> <input type="datetime-local" v-model="end" /></div>
 			</div>
 			<div class="side" v-if="editMode">
-				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
+				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(start, end) }}</div>
 				<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
 			</div>
 		</div>
 		<div class="buttons" v-if="editMode">
-			<button>Save</button>
-			<button>Delete</button>
+			<button @click="saveChanged">Save</button>
+			<button @click="deleteCatheter">Delete</button>
 		</div>
 		<!-- <div class="catheter" v-if="editMode"></div> -->
-		<div class="editButton" @click="editMode = !editMode">Edit</div>
+		<div class="editButton" @click="toggleEditmode()">Edit</div>
 	</div>
 </template>
 
@@ -147,5 +174,21 @@ function formatDuration(start, end) {
 	parts.push(`${minutes}m`);
 
 	return parts.join(" ");
+}
+
+function formatDateTimeLocal(value) {
+	if (!value) return "";
+
+	const date = value instanceof Date ? value : new Date(value);
+	if (isNaN(date.getTime())) return "";
+
+	// Format: YYYY-MM-DDTHH:mm
+	const yyyy = date.getFullYear();
+	const mm = String(date.getMonth() + 1).padStart(2, "0");
+	const dd = String(date.getDate()).padStart(2, "0");
+	const hh = String(date.getHours()).padStart(2, "0");
+	const min = String(date.getMinutes()).padStart(2, "0");
+
+	return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
 }
 </script>
