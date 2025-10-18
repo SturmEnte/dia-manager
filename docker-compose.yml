@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+ backend:
+  build:
+   context: ./backend
+  container_name: dia_backend
+  env_file:
+   - ./.env
+  environment:
+   # Matches backend/config/config.go (expects PORT, DATABASE_URI, TOKEN_*)
+   PORT: ${PORT}
+   DATABASE_URI: ${DATABASE_URI}
+   TOKEN_LIFETIME: ${TOKEN_LIFETIME}
+   TOKEN_SECRET: ${TOKEN_SECRET}
+  expose:
+   - "${PORT}"
+  restart: unless-stopped
+
+ web:
+  build:
+   context: ./web
+   args:
+    VITE_API_BASE: ${VITE_API_BASE:-/}
+  container_name: dia_web
+  env_file:
+   - ./.env
+  environment:
+   BACKEND_HOST: ${BACKEND_HOST:-backend}
+   BACKEND_PORT: ${PORT}
+  ports:
+   - "${FRONTEND_PORT}:80" # change FRONTEND_PORT in .env to avoid 80
+  depends_on:
+   - backend
+  restart: unless-stopped
