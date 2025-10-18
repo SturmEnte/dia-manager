@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from "vue";
+
 const props = defineProps({
 	id: {
 		type: String,
@@ -14,6 +16,95 @@ const props = defineProps({
 	},
 });
 
+let editMode = ref();
+editMode.value = false;
+</script>
+
+<template>
+	<div class="catheter-container">
+		<div class="catheter">
+			<div class="side" v-if="!editMode">
+				<div><span class="attr-title">Gestartet:</span> {{ formatDate(props.startedAt) }}</div>
+				<div><span class="attr-title">Beendet:</span> {{ formatDate(props.endedAt) }}</div>
+			</div>
+			<div class="side" v-if="!editMode">
+				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
+			</div>
+
+			<!-- Edit catheter -->
+			<div class="side" v-if="editMode">
+				<div><span class="attr-title">Gestartet:</span> {{ formatDate(props.startedAt) }}</div>
+				<div><span class="attr-title">Beendet:</span> {{ formatDate(props.endedAt) }}</div>
+			</div>
+			<div class="side" v-if="editMode">
+				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
+			</div>
+		</div>
+		<div class="buttons" v-if="editMode">
+			<button>Save</button>
+			<button>Delete</button>
+		</div>
+		<!-- <div class="catheter" v-if="editMode"></div> -->
+		<div class="editButton" @click="editMode = !editMode">Edit</div>
+	</div>
+</template>
+
+<style>
+.catheter-container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.catheter {
+	background: var(--col-3);
+	border-radius: var(--radius);
+	padding: var(--padding);
+	display: flex;
+	width: 100%;
+}
+
+.catheter .side {
+	flex: 1;
+}
+
+.attr-title {
+	font-weight: 600;
+}
+
+.buttons {
+	display: flex;
+}
+
+.buttons button {
+	border: none;
+	background: var(--col-2);
+	color: var(--col-font);
+	border-radius: var(--radius);
+	font-size: 1rem;
+	flex: 1;
+	cursor: pointer;
+}
+
+.buttons button:first-of-type {
+	margin-right: var(--padding);
+}
+
+.editButton {
+	position: absolute;
+	right: var(--padding);
+	top: var(--padding);
+	cursor: pointer;
+	background: var(--col-2);
+	padding: calc(var(--padding) / 2);
+	border-radius: var(--radius);
+	font-size: 0.9rem;
+}
+</style>
+
+<script>
 function formatDate(value) {
 	if (!value) return "-";
 
@@ -58,33 +149,3 @@ function formatDuration(start, end) {
 	return parts.join(" ");
 }
 </script>
-
-<template>
-	<div class="catheter">
-		<div class="side">
-			<div><span class="attr-title">Gestartet:</span> {{ formatDate(props.startedAt) }}</div>
-			<div><span class="attr-title">Beendet:</span> {{ formatDate(props.endedAt) }}</div>
-		</div>
-		<div class="side">
-			<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
-			<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
-		</div>
-	</div>
-</template>
-
-<style>
-.catheter {
-	background: var(--col-3);
-	border-radius: var(--radius);
-	padding: var(--padding);
-	display: flex;
-}
-
-.catheter .side {
-	flex: 1;
-}
-
-.attr-title {
-	font-weight: 600;
-}
-</style>
