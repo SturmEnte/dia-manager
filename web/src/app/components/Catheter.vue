@@ -17,6 +17,8 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits(["deleted"]);
+
 let editMode = ref();
 editMode.value = false;
 
@@ -48,7 +50,11 @@ async function saveChanges() {
 	editMode.value = false;
 }
 
-function deleteCatheter() {}
+async function deleteCatheter() {
+	const res = await api.deleteCatheter(props.id);
+	if (!res.id) return;
+	emit("deleted", props.id);
+}
 </script>
 
 <template>

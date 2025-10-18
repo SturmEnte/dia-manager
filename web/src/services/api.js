@@ -92,6 +92,18 @@ class DiaManagerAPIService {
 			return { id, startedAt: start, endedAt: end };
 		}
 	}
+
+	async deleteCatheter(id) {
+		const res = await this.request("/catheters/" + id, {
+			method: "DELETE",
+		});
+
+		if (!res) return;
+
+		if (res.status === 200) {
+			return { id };
+		}
+	}
 }
 
 const api = new DiaManagerAPIService();
