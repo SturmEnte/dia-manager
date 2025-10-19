@@ -15,8 +15,14 @@ func AuthMiddleware() gin.HandlerFunc {
         token, err := c.Cookie("token")
 
 		if err != nil {
+            if(err.Error() == "http: named cookie not present") {
+                c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "No token present"})
+                return
+            }
+
+            println(err.Error())
+
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Error while checking token validity"})
-			println(err)
 			return
 		}
         

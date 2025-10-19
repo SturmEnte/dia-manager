@@ -5,6 +5,7 @@ import (
 
 	authHandler "dia-manager-backend/handler/auth"
 	catheterHandler "dia-manager-backend/handler/catheter"
+	userHandler "dia-manager-backend/handler/user"
 
 	"dia-manager-backend/middleware"
 )
@@ -30,6 +31,11 @@ func SetupRouter() *gin.Engine {
         catheter.PUT("/:id", catheterHandler.UpdateCatheter)
         catheter.DELETE("/:id", catheterHandler.DeleteCatheter)
     }
+
+	user := r.Group("/user")
+	{
+		user.GET("/me", userHandler.GetUserInfo)
+	}
 
     return r
 }
