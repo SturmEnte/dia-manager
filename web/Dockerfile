@@ -10,7 +10,10 @@ RUN npm run build
 
 # Serve stage with runtime-configurable proxy via envsubst
 FROM nginx:stable-alpine
-RUN apk update && apk add --no-cache bash gettext
+RUN apk update && \
+    apk add --no-cache bash gettext || \
+    (sleep 5 && apk update && apk add --no-cache bash gettext) || \
+    (sleep 10 && apk update && apk add --no-cache bash gettext)
 COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
 COPY --from=build /app/dist/ /usr/share/nginx/html/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
