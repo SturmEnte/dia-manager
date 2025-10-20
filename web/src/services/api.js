@@ -14,7 +14,7 @@ class DiaManagerAPIService {
 			return;
 		}
 
-		if (res.status >= 400) {
+		if (res.status >= 400 && res.status < 500) {
 			// TODO: Change with cleaner info thingy
 			alert("User error");
 			return;
