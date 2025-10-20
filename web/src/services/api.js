@@ -67,7 +67,7 @@ class DiaManagerAPIService {
 		if (!res) return;
 
 		if (res.status === 201) {
-			const id = await res.json().id;
+			const id = (await res.json()).id;
 			return { id, startedAt: start, endedAt: end };
 		}
 	}
