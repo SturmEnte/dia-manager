@@ -26,7 +26,8 @@ func Register(c *gin.Context) {
         return
     }
 
-    token, err := auth.CreateToken(id, req.Username)
+    cfg := c.MustGet("config").(*config.Config)
+    token, err := auth.CreateToken(cfg, id, req.Username)
 
     if err != nil {
         println(err.Error())
@@ -62,7 +63,9 @@ func Login(c *gin.Context) {
         return
     }
 
-    token, err := auth.CreateToken(id, req.Username)
+    cfg := c.MustGet("config").(*config.Config)
+
+    token, err := auth.CreateToken(cfg, id, req.Username)
 
     if err != nil {
         println(err.Error())
@@ -70,7 +73,7 @@ func Login(c *gin.Context) {
         return
     }
 
-    c.SetCookie("token", token, 3600, "/", "", false, true)
+    c.SetCookie("token", token, cfg.TokenLifetime * 60, "/", "", false, true)
     c.Status(http.StatusOK)
 }
 
