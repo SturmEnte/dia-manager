@@ -55,6 +55,14 @@ async function deleteCatheter() {
 	if (!res.id) return;
 	emit("deleted", props.id);
 }
+
+function checkStartInput() {
+	// Prevents a empty value to be tried to saved with would cause an error
+	// Preventing the event is not possible for this type of event
+	if (start.value == "") {
+		start.value = oldStart;
+	}
+}
 </script>
 
 <template>
@@ -71,7 +79,7 @@ async function deleteCatheter() {
 
 			<!-- Edit catheter -->
 			<div class="side" v-if="editMode">
-				<div><span class="attr-title">Gestartet:</span> <input class="form-input" type="datetime-local" v-model="start" /></div>
+				<div><span class="attr-title">Gestartet:</span> <input class="form-input" type="datetime-local" v-model="start" @input="checkStartInput" /></div>
 				<div><span class="attr-title">Beendet:</span> <input class="form-input" type="datetime-local" v-model="end" :min="start || undefined" /></div>
 			</div>
 			<div class="side" v-if="editMode">

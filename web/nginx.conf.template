@@ -5,6 +5,11 @@ server {
   root /usr/share/nginx/html;
   index index.html;
 
+  # Allow static assets (won't be subject to the location / cookie check)
+  location ~* \.(?:css|js|mjs|json|map|png|jpg|jpeg|gif|svg|ico|woff2?|ttf|eot)$ {
+    try_files $uri =404;
+  }
+
   location = /login {
     try_files /login.html =404;
   }
@@ -16,11 +21,6 @@ server {
   }
   location = /register/ {
     try_files /register.html =404;
-  }
-
-  # Serve static files. If not found, fallback to 404.html
-  location / {
-    try_files $uri $uri/ /404.html;
   }
 
   # Proxy /api and /api/* to the backend, stripping the /api prefix:
@@ -43,5 +43,14 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Connection "";
     proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/;
+  }
+
+  # Serve app if nothing else matched before
+  # This is a temporary fix
+  location / {
+    if ($cookie_token = "") {
+      return 302 /login;
+    }
+    try_files /index.html =404;
   }
 }

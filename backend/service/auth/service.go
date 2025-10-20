@@ -32,18 +32,20 @@ func CreateUser(username string, password string) (string, error) {
     return id, nil
 }
 
-func CreateToken(id string, username string) (string, error) {
+func CreateToken(cfg *config.Config, id string, username string) (string, error) {
+
+    
 
     claims := jwt.MapClaims{
         "user_id":  id,
         "username": username,
-        "exp":     time.Now().Add(time.Duration(config.Load().TokenLifetime) * time.Minute).Unix(), // DONT LOAD CONFIG HERE
+        "exp":     time.Now().Add(time.Duration(cfg.TokenLifetime) * time.Minute).Unix(),
         "iat":      time.Now().Unix(),
     }
 
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-    secretKey := []byte(config.Load().TokenSecret) // DONT LOAD CONFIG HERE
+    secretKey := []byte(cfg.TokenSecret)
     tokenString, err := token.SignedString(secretKey)
     
     if err != nil {

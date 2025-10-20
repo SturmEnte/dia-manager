@@ -14,7 +14,7 @@ class DiaManagerAPIService {
 			return;
 		}
 
-		if (res.status >= 400) {
+		if (res.status >= 400 && res.status < 500) {
 			// TODO: Change with cleaner info thingy
 			alert("User error");
 			return;
@@ -67,7 +67,7 @@ class DiaManagerAPIService {
 		if (!res) return;
 
 		if (res.status === 201) {
-			const id = await res.json().id;
+			const id = (await res.json()).id;
 			return { id, startedAt: start, endedAt: end };
 		}
 	}
