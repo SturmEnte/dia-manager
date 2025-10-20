@@ -5,6 +5,11 @@ server {
   root /usr/share/nginx/html;
   index index.html;
 
+  # Allow static assets (won't be subject to the location / cookie check)
+  location ~* \.(?:css|js|mjs|json|map|png|jpg|jpeg|gif|svg|ico|woff2?|ttf|eot)$ {
+    try_files $uri =404;
+  }
+
   location = /login {
     try_files /login.html =404;
   }
@@ -20,6 +25,9 @@ server {
 
   # Serve static files. If not found, fallback to 404.html
   location / {
+    if ($cookie_token = "") {
+      return 302 /login;
+    }
     try_files $uri $uri/ /404.html;
   }
 
