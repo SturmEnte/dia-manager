@@ -30,13 +30,15 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 	id := 1
 
 	if startedAt != nil {
-
-		query += " started_at=$" + strconv.Itoa(id) + ","
+		query += " started_at=$" + strconv.Itoa(id)
 		args = append(args, startedAt)
 		id++
 	}
 
 	if endedAt != nil {
+		if startedAt != nil {
+			query += ","
+		}
 
 		query += " ended_at=$" + strconv.Itoa(id)
 		args = append(args, endedAt)
