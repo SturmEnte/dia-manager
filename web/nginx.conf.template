@@ -23,14 +23,6 @@ server {
     try_files /register.html =404;
   }
 
-  # Serve static files. If not found, fallback to 404.html
-  location / {
-    if ($cookie_token = "") {
-      return 302 /login;
-    }
-    try_files $uri $uri/ /404.html;
-  }
-
   # Proxy /api and /api/* to the backend, stripping the /api prefix:
   #  - /api        -> backend /
   #  - /api/       -> backend /
@@ -51,5 +43,14 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Connection "";
     proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT}/;
+  }
+
+  # Serve app if nothing else matched before
+  # This is a temporary fix
+  location / {
+    if ($cookie_token = "") {
+      return 302 /login;
+    }
+    try_files /index.html =404;
   }
 }
