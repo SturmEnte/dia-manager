@@ -1,0 +1,35 @@
+version: 2
+updates:
+ # Go modules
+ - package-ecosystem: "gomod"
+   directory: "/backend"
+   schedule:
+    interval: "weekly"
+   target-branch: "dev"
+
+ # npm packages
+ - package-ecosystem: "npm"
+   directory: "/frontend"
+   schedule:
+    interval: "weekly"
+   target-branch: "dev"
+
+ # Docker dependencies
+ # For docker-compose.yaml in root
+ - package-ecosystem: "docker"
+   directory: "/"
+   schedule:
+   interval: "weekly"
+   target-branch: "dev"
+ # For Dockerfile in backend
+ - package-ecosystem: "docker"
+   directory: "/backend"
+   schedule:
+    interval: "weekly"
+   target-branch: "dev"
+ # For Dockerfile in web
+ - package-ecosystem: "docker"
+   directory: "/web"
+   schedule:
+    interval: "weekly"
+   target-branch: "dev"
