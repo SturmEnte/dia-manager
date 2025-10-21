@@ -19,7 +19,7 @@ updates:
  - package-ecosystem: "docker"
    directory: "/"
    schedule:
-   interval: "weekly"
+    interval: "weekly"
    target-branch: "dev"
  # For Dockerfile in backend
  - package-ecosystem: "docker"
