@@ -33,9 +33,6 @@ func CreateUser(username string, password string) (string, error) {
 }
 
 func CreateToken(cfg *config.Config, id string, username string) (string, error) {
-
-    
-
     claims := jwt.MapClaims{
         "user_id":  id,
         "username": username,
