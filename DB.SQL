@@ -18,5 +18,11 @@ CREATE TABLE IF NOT EXISTS catheters (
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     started_at TIMESTAMPTZ NOT NULL,
     ended_at TIMESTAMPTZ DEFAULT NULL,
+    change_reason smallint DEFAULT 0 NOT NULL,
+    CHECK (change_reason >= 0)
     CHECK (ended_at IS NULL OR ended_at > started_at)
 );
+
+-- Migration from 1.0.x to 1.1.x --
+ALTER TABLE catheters
+ADD COLUMN change_reason smallint DEFAULT 0 NOT NULL;
