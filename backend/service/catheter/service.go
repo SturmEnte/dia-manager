@@ -6,17 +6,32 @@ import (
 	"time"
 
 	"dia-manager-backend/config"
+	"dia-manager-backend/enums"
 	"dia-manager-backend/models"
 	"dia-manager-backend/types"
 	"dia-manager-backend/utils"
 )
 
-func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (string, error) {
+func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time, changeReason *enums.ChangeReason) (string, error) {
 
 	var id string
 
-	err := config.DB.QueryRow(context.Background(), `INSERT INTO catheters (user_id, started_at, ended_at) VALUES ($1, $2, $3) RETURNING id`, userId, startedAt, endedAt).Scan(&id)
-	
+	pairs := []types.Pair{}
+
+	pairs = append(pairs, types.Pair{Key: "user_id", Value: userId})
+	pairs = append(pairs, types.Pair{Key: "started_at", Value: startedAt})
+
+	if endedAt != nil {
+		pairs = append(pairs, types.Pair{Key: "ended_at", Value: endedAt})
+	}
+
+	if changeReason != nil {
+		pairs = append(pairs, types.Pair{Key: "change_reason", Value: changeReason})
+	}
+
+	query, args := utils.BuildDynamicInsert("catheters", pairs, []string{"id"})
+	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&id)
+
 	if err != nil {
 	    println(err.Error())
 	    return "", errors.New("failed to insert the new user into the database")

@@ -21,7 +21,7 @@ func CreateCatheter(c *gin.Context) {
 
     var userId string = utils.GetUserIdByContext(c)
 
-    catheterId, err := catheterService.CreateCatheter(userId, req.Start, req.End)
+    catheterId, err := catheterService.CreateCatheter(userId, req.Start, req.End, req.ChangeReason)
 
     if err != nil {
         log.Println(err.Error())
