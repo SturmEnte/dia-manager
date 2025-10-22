@@ -2,11 +2,13 @@ package catheter
 
 import (
 	"context"
+	"errors"
+	"time"
+
 	"dia-manager-backend/config"
 	"dia-manager-backend/models"
-	"errors"
-	"strconv"
-	"time"
+	"dia-manager-backend/types"
+	"dia-manager-backend/utils"
 )
 
 func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (string, error) {
@@ -24,43 +26,35 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (str
 }
 
 func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time) (error) {
-
-	query := "UPDATE catheters SET"
-	args := []interface{}{}
-	id := 1
+	setPairs := []types.Pair{}
 
 	if startedAt != nil {
-		query += " started_at=$" + strconv.Itoa(id)
-		args = append(args, startedAt)
-		id++
+		setPairs = append(setPairs, types.Pair{Key: "started_at", Value: *startedAt})
 	}
 
 	if endedAt != nil {
-		if startedAt != nil {
-			query += ","
-		}
-
-		query += " ended_at=$" + strconv.Itoa(id)
-		args = append(args, endedAt)
-		id++
+		setPairs = append(setPairs, types.Pair{Key: "ended_at", Value: *endedAt})
 	}
 
-	if len(args) == 0 {
+	if len(setPairs) == 0 {
 		return errors.New("nothing to update")
 	}
 
-	// Missing not found error
+	wherePairs := []types.Pair{
+		{Key: "id", Value: catheterId},
+		{Key: "user_id", Value: userId},
+	}
 
-	args = append(args, catheterId)
-	args = append(args, userId)
-	query += " WHERE id=$" + strconv.Itoa(id) + " AND user_id=$" + strconv.Itoa(id + 1) 
+	query, args := utils.BuildDynamicUpdate("catheters", setPairs, wherePairs)
+
+	println(query)
 
 	var dummy int
 	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&dummy)
 	
 	if err != nil && err.Error() != "no rows in result set"  {
-	    println(err.Error())
-	    return errors.New("failed to insert the new user into the database")
+		println(err.Error())
+		return errors.New("failed to update catheter in the database")
 	}
 
 	return nil
