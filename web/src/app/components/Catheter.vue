@@ -3,8 +3,6 @@ import { ref } from "vue";
 import api from "../../services/api";
 
 const CHANGE_REASONS = ["Unbekannt", "Andere", "Regulärer Wechsel", "Entzündung", "Langsame Insulinreaktion"];
-let CHANGE_REASONS_REF = ref([]);
-CHANGE_REASONS_REF.value = CHANGE_REASONS;
 
 const props = defineProps({
 	id: {
@@ -48,7 +46,7 @@ function toggleEditmode() {
 	if (editMode.value) {
 		start.value = oldStart;
 		end.value = oldEnd;
-		changeReasonSelect.value = oldChangeReasonSlect;
+		changeReason.value = oldChangeReason;
 	} else {
 		oldStart = start.value;
 		oldEnd = end.value;
@@ -87,7 +85,7 @@ function checkStartInput() {
 			</div>
 			<div class="side" v-if="!editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
-				<div><span class="attr-title">Wechselgrund:</span> {{ CHANGE_REASONS_REF[changeReason] }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{ CHANGE_REASONS[changeReason] }}</div>
 			</div>
 
 			<!-- Edit catheter -->
