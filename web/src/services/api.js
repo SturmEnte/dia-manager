@@ -51,10 +51,11 @@ class DiaManagerAPIService {
 		return data.catheters;
 	}
 
-	async createCatheter(start, end) {
+	async createCatheter(start, end, changeReason) {
 		let catheter = { startedAt: new Date(start).toISOString() };
 
 		if (end) catheter.endedAt = new Date(end).toISOString();
+		if (changeReason) catheter.changeReason = changeReason;
 
 		const res = await this.request("/catheters", {
 			method: "POST",
@@ -68,7 +69,7 @@ class DiaManagerAPIService {
 
 		if (res.status === 201) {
 			const id = (await res.json()).id;
-			return { id, startedAt: start, endedAt: end };
+			return { id, startedAt: start, endedAt: end, changeReason };
 		}
 	}
 

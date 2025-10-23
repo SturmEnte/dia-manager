@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import api from "../../services/api";
-
-const CHANGE_REASONS = ["Unbekannt", "Andere", "Regulärer Wechsel", "Entzündung", "Langsame Insulinreaktion"];
+import { CHANGE_REASONS } from "../../services/constants";
 
 const props = defineProps({
 	id: {
