@@ -46,7 +46,16 @@ function removeCatheter(id) {
 		<div id="history" class="window">
 			<div class="title">Historie</div>
 			<div id="catheters" class="scrollbar">
-				<Catheter class="catheter" v-for="catheter in cathetersObj" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" @deleted="removeCatheter" />
+				<Catheter
+					class="catheter"
+					v-for="catheter in cathetersObj"
+					:key="catheter.id"
+					:id="catheter.id"
+					:started-at="catheter.startedAt"
+					:ended-at="catheter.endedAt"
+					:change-reason="catheter.changeReason"
+					@deleted="removeCatheter"
+				/>
 			</div>
 		</div>
 		<div id="create" class="window">

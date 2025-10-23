@@ -2,6 +2,10 @@
 import { ref } from "vue";
 import api from "../../services/api";
 
+const CHANGE_REASONS = ["Unbekannt", "Andere", "Regulärer Wechsel", "Entzündung", "Langsame Insulinreaktion"];
+let CHANGE_REASONS_REF = ref([]);
+CHANGE_REASONS_REF.value = CHANGE_REASONS;
+
 const props = defineProps({
 	id: {
 		type: String,
@@ -14,6 +18,10 @@ const props = defineProps({
 	endedAt: {
 		type: [String, Date],
 		required: false,
+	},
+	changeReason: {
+		type: Number,
+		required: true,
 	},
 });
 
@@ -74,7 +82,7 @@ function checkStartInput() {
 			</div>
 			<div class="side" v-if="!editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
-				<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{ CHANGE_REASONS_REF[props.changeReason < CHANGE_REASONS.length && props.changeReason >= 0 ? props.changeReason : 0] }}</div>
 			</div>
 
 			<!-- Edit catheter -->
@@ -84,7 +92,7 @@ function checkStartInput() {
 			</div>
 			<div class="side" v-if="editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(start, end) }}</div>
-				<div><span class="attr-title">Wechselgrund:</span> {{ null }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{}}</div>
 			</div>
 		</div>
 		<div class="buttons" v-if="editMode">
