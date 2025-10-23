@@ -23,8 +23,9 @@ func StartScheduler() {
     c.Start()
 }
 
+// Deletes all expired tokens because they are invalid no matter if they are in the database or not
 func runSQLTask() {
-    _, err := config.DB.Exec(context.Background(), `DELETE FROM sessions WHERE expires < NOW()`)
+    _, err := config.DB.Exec(context.Background(), `DELETE FROM invalid_tokens WHERE expires < NOW()`)
 
     if err != nil {
         log.Println("SQL task failed: " + err.Error())

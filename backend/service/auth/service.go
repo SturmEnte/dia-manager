@@ -33,9 +33,6 @@ func CreateUser(username string, password string) (string, error) {
 }
 
 func CreateToken(cfg *config.Config, id string, username string) (string, error) {
-
-    
-
     claims := jwt.MapClaims{
         "user_id":  id,
         "username": username,
@@ -54,4 +51,59 @@ func CreateToken(cfg *config.Config, id string, username string) (string, error)
     }
 
     return tokenString, nil
+}
+
+func DisableToken(cfg *config.Config, tokenString string) (error) {
+    
+    token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
+        if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+            return nil, errors.New("unexpected signing method")
+        }
+        return []byte(cfg.TokenSecret), nil
+    })
+
+    if err != nil {
+        return err
+    }
+
+    if !token.Valid {
+        return errors.New("invalid token")
+    }
+
+    // Extract claims and read "exp"
+    claims, ok := token.Claims.(jwt.MapClaims)
+    if !ok {
+        return errors.New("invalid token claims")
+    }
+
+    expVal, ok := claims["exp"]
+    if !ok {
+        return errors.New("token missing exp claim")
+    }
+
+    // MapClaims typically stores numeric values as float64
+    var expTime time.Time
+    switch v := expVal.(type) {
+    case float64:
+        expTime = time.Unix(int64(v), 0)
+    case int64:
+        expTime = time.Unix(v, 0)
+    default:
+        return errors.New("unexpected exp claim type")
+    }
+    
+    remaining := time.Until(expTime)
+    
+    if remaining <= 0 {
+        return errors.New("token already expired")
+    }
+
+    // Store invalid token so that the auth middleware knows this token is not valid even though its not expired
+    _, err = config.DB.Exec(context.Background(), `INSERT INTO invalid_tokens (token, expires) VALUES ($1, $2)`, tokenString, expTime)
+    
+    if err != nil {
+        return err
+    }
+
+    return nil
 }

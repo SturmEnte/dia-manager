@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,20 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
         
-		// TODO: Check if token is marked as invalid in db (logged out)
+		// Check if token is invalid
+        var dummy string
+        err = config.DB.QueryRow(context.Background(), `SELECT id FROM invalid_tokens WHERE token=$1`, token).Scan(&dummy)
+
+        if err != nil && err.Error() != "no rows in result set" {
+            println(err.Error())
+            c.AbortWithStatus(http.StatusBadRequest)
+            return
+        }
+
+        // If there is no error that means that the query returned a id which means that the token is invalid
+        if err == nil {
+            c.AbortWithStatus(http.StatusUnauthorized)
+        }
 
 		// Parse and validate JWT
         jwtToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {

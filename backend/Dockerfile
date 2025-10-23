@@ -5,7 +5,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 # Module is "dia-manager-backend", entrypoint is main.go in this folder
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /out/server ./.
+RUN GIN_MODE=release CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /out/server ./.
 
 # Runtime stage
 FROM gcr.io/distroless/static-debian12

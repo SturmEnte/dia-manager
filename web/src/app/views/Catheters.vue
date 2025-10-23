@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import api from "../../services/api";
+import { CHANGE_REASONS } from "../../services/constants";
 
 import Catheter from "../components/Catheter.vue";
 
@@ -18,11 +19,12 @@ onMounted(async () => {
 // Create new entry
 const start = ref("");
 const end = ref("");
+const changeReason = ref(0);
 
 async function createCatheter() {
 	if (!start.value) return;
 
-	const newCatheter = await api.createCatheter(start.value, end.value);
+	const newCatheter = await api.createCatheter(start.value, end.value, changeReason.value);
 
 	if (!newCatheter) {
 		return;
@@ -34,6 +36,7 @@ async function createCatheter() {
 	// Reset form fields
 	start.value = "";
 	end.value = "";
+	changeReason.value = 0;
 }
 
 function removeCatheter(id) {
@@ -46,7 +49,16 @@ function removeCatheter(id) {
 		<div id="history" class="window">
 			<div class="title">Historie</div>
 			<div id="catheters" class="scrollbar">
-				<Catheter class="catheter" v-for="catheter in cathetersObj" :key="catheter.id" :id="catheter.id" :started-at="catheter.startedAt" :ended-at="catheter.endedAt" @deleted="removeCatheter" />
+				<Catheter
+					class="catheter"
+					v-for="catheter in cathetersObj"
+					:key="catheter.id"
+					:id="catheter.id"
+					:started-at="catheter.startedAt"
+					:ended-at="catheter.endedAt"
+					:change-reason="catheter.changeReason"
+					@deleted="removeCatheter"
+				/>
 			</div>
 		</div>
 		<div id="create" class="window">
@@ -56,6 +68,10 @@ function removeCatheter(id) {
 				<input id="start" name="start" type="datetime-local" required v-model="start" />
 				<label for="end">Ende</label>
 				<input id="end" name="end" type="datetime-local" v-model="end" :min="start || undefined" />
+				<label for="change-reason">Wechselgrund</label>
+				<select id="change-reason" class="form-input" v-model="changeReason">
+					<option v-for="(reason, i) in CHANGE_REASONS" :key="i" :value="i">{{ reason }}</option>
+				</select>
 				<button type="submit">Eintragen</button>
 			</form>
 		</div>

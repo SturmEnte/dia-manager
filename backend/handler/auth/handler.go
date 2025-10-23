@@ -78,6 +78,24 @@ func Login(c *gin.Context) {
 }
 
 func Logout(c *gin.Context) {
-    // TODO: Add token to invalid tokens in db
-    c.Status(http.StatusNotImplemented)
+    
+    token, err := c.Cookie("token")
+
+    // There should be no error at this point because the cookie was already checked by the middleware
+    if err != nil {
+        println(err.Error())
+        c.AbortWithStatus(http.StatusInternalServerError)
+        return
+    }
+
+    cfg := c.MustGet("config").(*config.Config)
+
+    err = auth.DisableToken(cfg, token)
+
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.Status(http.StatusOK)
 }

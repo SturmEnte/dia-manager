@@ -2,19 +2,36 @@ package catheter
 
 import (
 	"context"
-	"dia-manager-backend/config"
-	"dia-manager-backend/models"
 	"errors"
-	"strconv"
 	"time"
+
+	"dia-manager-backend/config"
+	"dia-manager-backend/enums"
+	"dia-manager-backend/models"
+	"dia-manager-backend/types"
+	"dia-manager-backend/utils"
 )
 
-func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (string, error) {
+func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time, changeReason *enums.ChangeReason) (string, error) {
 
 	var id string
 
-	err := config.DB.QueryRow(context.Background(), `INSERT INTO catheters (user_id, started_at, ended_at) VALUES ($1, $2, $3) RETURNING id`, userId, startedAt, endedAt).Scan(&id)
-	
+	pairs := []types.Pair{}
+
+	pairs = append(pairs, types.Pair{Key: "user_id", Value: userId})
+	pairs = append(pairs, types.Pair{Key: "started_at", Value: startedAt})
+
+	if endedAt != nil {
+		pairs = append(pairs, types.Pair{Key: "ended_at", Value: endedAt})
+	}
+
+	if changeReason != nil {
+		pairs = append(pairs, types.Pair{Key: "change_reason", Value: changeReason})
+	}
+
+	query, args := utils.BuildDynamicInsert("catheters", pairs, []string{"id"})
+	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&id)
+
 	if err != nil {
 	    println(err.Error())
 	    return "", errors.New("failed to insert the new user into the database")
@@ -23,44 +40,40 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time) (str
 	return id, nil
 }
 
-func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time) (error) {
-
-	query := "UPDATE catheters SET"
-	args := []interface{}{}
-	id := 1
+func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time, changeReason *enums.ChangeReason) (error) {
+	setPairs := []types.Pair{}
 
 	if startedAt != nil {
-		query += " started_at=$" + strconv.Itoa(id)
-		args = append(args, startedAt)
-		id++
+		setPairs = append(setPairs, types.Pair{Key: "started_at", Value: *startedAt})
 	}
 
 	if endedAt != nil {
-		if startedAt != nil {
-			query += ","
-		}
-
-		query += " ended_at=$" + strconv.Itoa(id)
-		args = append(args, endedAt)
-		id++
+		setPairs = append(setPairs, types.Pair{Key: "ended_at", Value: *endedAt})
 	}
 
-	if len(args) == 0 {
+	if changeReason != nil {
+		setPairs = append(setPairs, types.Pair{Key: "change_reason", Value: *changeReason})
+	}
+
+	if len(setPairs) == 0 {
 		return errors.New("nothing to update")
 	}
 
-	// Missing not found error
+	wherePairs := []types.Pair{
+		{Key: "id", Value: catheterId},
+		{Key: "user_id", Value: userId},
+	}
 
-	args = append(args, catheterId)
-	args = append(args, userId)
-	query += " WHERE id=$" + strconv.Itoa(id) + " AND user_id=$" + strconv.Itoa(id + 1) 
+	query, args := utils.BuildDynamicUpdate("catheters", setPairs, wherePairs)
+
+	println(query)
 
 	var dummy int
 	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&dummy)
 	
 	if err != nil && err.Error() != "no rows in result set"  {
-	    println(err.Error())
-	    return errors.New("failed to insert the new user into the database")
+		println(err.Error())
+		return errors.New("failed to update catheter in the database")
 	}
 
 	return nil
@@ -71,8 +84,8 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
     var catheter models.Catheter
 
     err := config.DB.QueryRow(context.Background(), 
-        `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id=$1 AND id=$2`, 
-        userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+        `SELECT * FROM catheters WHERE user_id=$1 AND id=$2`, 
+        userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt, &catheter.ChangeReason)
 
     if err != nil {
         if err.Error() == "no rows in result set" {
@@ -88,7 +101,7 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
 
 func GetCatheters(userId string) ([]models.Catheter, error) {
 	
-	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1`, userId)
+	rows, err := config.DB.Query(context.Background(), `SELECT * FROM catheters WHERE user_id = $1`, userId)
 	
 	if err != nil {
 		println(err.Error())
@@ -104,7 +117,7 @@ func GetCatheters(userId string) ([]models.Catheter, error) {
 		var catheter models.Catheter
 		
 		// Scan the row data into the catheter struct
-		err := rows.Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+		err := rows.Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt, &catheter.ChangeReason)
 		
 		if err != nil {
 			println(err.Error())
