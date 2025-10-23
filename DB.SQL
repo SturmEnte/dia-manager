@@ -24,5 +24,13 @@ CREATE TABLE IF NOT EXISTS catheters (
 );
 
 -- Migration from 1.0.x to 1.1.x --
+CREATE TABLE IF NOT EXISTS invalid_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    token TEXT UNIQUE NOT NULL,
+    expires TIMESTAMPTZ NOT NULL
+);
+
+-- the old sessions table can be deletet, it's no longer used
+
 ALTER TABLE catheters
 ADD COLUMN change_reason smallint DEFAULT 0 NOT NULL;
