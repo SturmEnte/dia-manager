@@ -32,29 +32,34 @@ editMode.value = false;
 
 let start = ref();
 let end = ref();
+let changeReason = ref();
 
 start.value = formatDateTimeLocal(props.startedAt);
 end.value = formatDateTimeLocal(props.endedAt);
+changeReason.value = props.changeReason;
 
 // Data before edit mode is entered
 let oldStart;
 let oldEnd;
+let oldChangeReason;
 
 // Toggle edit mode and discard unsaved changes
 function toggleEditmode() {
 	if (editMode.value) {
 		start.value = oldStart;
 		end.value = oldEnd;
+		changeReasonSelect.value = oldChangeReasonSlect;
 	} else {
 		oldStart = start.value;
 		oldEnd = end.value;
+		oldChangeReason = changeReason.value;
 	}
 
 	editMode.value = !editMode.value;
 }
 
 async function saveChanges() {
-	await api.updateCatheter(props.id, start.value, end.value);
+	await api.updateCatheter(props.id, start.value, end.value, changeReason.value);
 	editMode.value = false;
 }
 
@@ -82,7 +87,7 @@ function checkStartInput() {
 			</div>
 			<div class="side" v-if="!editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(props.startedAt, props.endedAt) }}</div>
-				<div><span class="attr-title">Wechselgrund:</span> {{ CHANGE_REASONS_REF[props.changeReason < CHANGE_REASONS.length && props.changeReason >= 0 ? props.changeReason : 0] }}</div>
+				<div><span class="attr-title">Wechselgrund:</span> {{ CHANGE_REASONS_REF[changeReason] }}</div>
 			</div>
 
 			<!-- Edit catheter -->
@@ -92,7 +97,12 @@ function checkStartInput() {
 			</div>
 			<div class="side" v-if="editMode">
 				<div><span class="attr-title">Tragedauer:</span> {{ formatDuration(start, end) }}</div>
-				<div><span class="attr-title">Wechselgrund:</span> {{}}</div>
+				<div>
+					<span class="attr-title">Wechselgrund:</span
+					><select class="form-input" v-model="changeReason">
+						<option v-for="(reason, i) in CHANGE_REASONS" :key="i" :value="i">{{ reason }}</option>
+					</select>
+				</div>
 			</div>
 		</div>
 		<div class="buttons" v-if="editMode">

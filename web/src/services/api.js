@@ -73,10 +73,11 @@ class DiaManagerAPIService {
 	}
 
 	// id and start are required, end is optional
-	async updateCatheter(id, start, end) {
+	async updateCatheter(id, start, end, changeReason) {
 		let catheter = { startedAt: new Date(start).toISOString() };
 
 		if (end) catheter.endedAt = new Date(end).toISOString();
+		if (changeReason) catheter.changeReason = changeReason;
 
 		const res = await this.request("/catheters/" + id, {
 			method: "PUT",
@@ -89,7 +90,7 @@ class DiaManagerAPIService {
 		if (!res) return;
 
 		if (res.status === 204) {
-			return { id, startedAt: start, endedAt: end };
+			return { id, startedAt: start, endedAt: end, changeReason };
 		}
 	}
 
