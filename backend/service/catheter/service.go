@@ -80,8 +80,8 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
     var catheter models.Catheter
 
     err := config.DB.QueryRow(context.Background(), 
-        `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id=$1 AND id=$2`, 
-        userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+        `SELECT * FROM catheters WHERE user_id=$1 AND id=$2`, 
+        userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt, &catheter.ChangeReason)
 
     if err != nil {
         if err.Error() == "no rows in result set" {
@@ -97,7 +97,7 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
 
 func GetCatheters(userId string) ([]models.Catheter, error) {
 	
-	rows, err := config.DB.Query(context.Background(), `SELECT id, user_id, started_at, ended_at FROM catheters WHERE user_id = $1`, userId)
+	rows, err := config.DB.Query(context.Background(), `SELECT * FROM catheters WHERE user_id = $1`, userId)
 	
 	if err != nil {
 		println(err.Error())
@@ -113,7 +113,7 @@ func GetCatheters(userId string) ([]models.Catheter, error) {
 		var catheter models.Catheter
 		
 		// Scan the row data into the catheter struct
-		err := rows.Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt)
+		err := rows.Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt, &catheter.ChangeReason)
 		
 		if err != nil {
 			println(err.Error())
