@@ -40,7 +40,7 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time, chan
 	return id, nil
 }
 
-func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time) (error) {
+func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, endedAt *time.Time, changeReason *enums.ChangeReason) (error) {
 	setPairs := []types.Pair{}
 
 	if startedAt != nil {
@@ -49,6 +49,10 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 
 	if endedAt != nil {
 		setPairs = append(setPairs, types.Pair{Key: "ended_at", Value: *endedAt})
+	}
+
+	if changeReason != nil {
+		setPairs = append(setPairs, types.Pair{Key: "change_reason", Value: *changeReason})
 	}
 
 	if len(setPairs) == 0 {

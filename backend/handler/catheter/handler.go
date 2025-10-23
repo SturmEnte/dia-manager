@@ -76,7 +76,7 @@ func UpdateCatheter(c *gin.Context) {
 
     catheterId := c.Param("id")
 
-    err := catheterService.UpdateCatheter(userId, catheterId, req.Start, req.End)
+    err := catheterService.UpdateCatheter(userId, catheterId, req.Start, req.End, req.ChangeReason)
 
     if err != nil && err.Error() != "nothing to update" {
         log.Println(err.Error())

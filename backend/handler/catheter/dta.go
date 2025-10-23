@@ -12,6 +12,7 @@ type CreateCatheterRequest struct {
 }
 
 type UpdateCatheterRequest struct {
-	Start		*time.Time	`json:"startedAt"`
-	End			*time.Time	`json:"endedAt"`
+	Start			*time.Time			`json:"startedAt"`
+	End				*time.Time			`json:"endedAt"`
+	ChangeReason	*enums.ChangeReason	`json:"changeReason"`
 }
