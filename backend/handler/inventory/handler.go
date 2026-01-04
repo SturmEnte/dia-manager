@@ -1,0 +1,33 @@
+package inventory
+
+import (
+	"log"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+
+	inventoryService "dia-manager-backend/service/inventory"
+	"dia-manager-backend/utils"
+)
+
+func CreateItemStructure(c *gin.Context) {
+
+	var req CreateItemStructureRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+	}
+
+	var userId string = utils.GetUserIdByContext(c)
+
+	structureId, err := inventoryService.CreateItemStructure(userId, req.Name, req.Attributes)
+
+	if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
+        return
+    }
+
+	c.JSON(http.StatusCreated, gin.H{"id": structureId})
+}

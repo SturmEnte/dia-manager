@@ -23,6 +23,17 @@ CREATE TABLE IF NOT EXISTS catheters (
     CHECK (ended_at IS NULL OR ended_at > started_at)
 );
 
+CREATE TABLE IF NOT EXISTS item_structures (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    attributes JSONB NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_item_structures_user_id ON item_structures(user_id);
+CREATE INDEX IF NOT EXISTS idx_item_structures_attributes_gin ON item_structures USING GIN (attributes);
+
 -- Migration from 1.0.x to 1.1.x --
 CREATE TABLE IF NOT EXISTS invalid_tokens (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

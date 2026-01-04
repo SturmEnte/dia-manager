@@ -7,6 +7,7 @@ import (
 
 	authHandler "dia-manager-backend/handler/auth"
 	catheterHandler "dia-manager-backend/handler/catheter"
+	inventoryHandler "dia-manager-backend/handler/inventory"
 	userHandler "dia-manager-backend/handler/user"
 
 	"dia-manager-backend/middleware"
@@ -46,6 +47,14 @@ func SetupRouter(env *env.Env) *gin.Engine {
 	user := r.Group("/user")
 	{
 		user.GET("/me", userHandler.GetUserInfo)
+	}
+
+	inventory := r.Group("/inventory")
+	{
+		itemStructure := inventory.Group("/structure")
+		{
+			itemStructure.POST("", inventoryHandler.CreateItemStructure)
+		}
 	}
 
     return r
