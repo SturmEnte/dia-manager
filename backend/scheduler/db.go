@@ -2,7 +2,7 @@ package scheduler
 
 import (
 	"context"
-	"dia-manager-backend/config"
+	"dia-manager-backend/env"
 	"log"
 
 	"github.com/robfig/cron/v3"
@@ -25,7 +25,7 @@ func StartScheduler() {
 
 // Deletes all expired tokens because they are invalid no matter if they are in the database or not
 func runSQLTask() {
-    _, err := config.DB.Exec(context.Background(), `DELETE FROM invalid_tokens WHERE expires < NOW()`)
+    _, err := env.DB.Exec(context.Background(), `DELETE FROM invalid_tokens WHERE expires < NOW()`)
 
     if err != nil {
         log.Println("SQL task failed: " + err.Error())

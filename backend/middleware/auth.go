@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 
-	"dia-manager-backend/config"
+	"dia-manager-backend/env"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -29,7 +29,7 @@ func AuthMiddleware() gin.HandlerFunc {
         
 		// Check if token is invalid
         var dummy string
-        err = config.DB.QueryRow(context.Background(), `SELECT id FROM invalid_tokens WHERE token=$1`, token).Scan(&dummy)
+        err = env.DB.QueryRow(context.Background(), `SELECT id FROM invalid_tokens WHERE token=$1`, token).Scan(&dummy)
 
         if err != nil && err.Error() != "no rows in result set" {
             println(err.Error())
@@ -50,7 +50,7 @@ func AuthMiddleware() gin.HandlerFunc {
             }
 
             // Return secret key for validation
-            return []byte(config.Load().TokenSecret), nil
+            return []byte(env.Load().TokenSecret), nil
         })
 
         if err != nil {

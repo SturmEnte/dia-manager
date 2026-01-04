@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"dia-manager-backend/config"
+	"dia-manager-backend/env"
 	"dia-manager-backend/service/auth"
 	"dia-manager-backend/utils"
 )
@@ -26,8 +26,8 @@ func Register(c *gin.Context) {
         return
     }
 
-    cfg := c.MustGet("config").(*config.Config)
-    token, err := auth.CreateToken(cfg, id, req.Username)
+    environmentVars := c.MustGet("env").(*env.Env)
+    token, err := auth.CreateToken(environmentVars, id, req.Username)
 
     if err != nil {
         println(err.Error())
@@ -50,7 +50,7 @@ func Login(c *gin.Context) {
     var id string
     var hashedPassword string
 
-    err := config.DB.QueryRow(context.Background(), `SELECT id, password FROM users WHERE username=$1`, req.Username).Scan(&id, &hashedPassword)
+    err := env.DB.QueryRow(context.Background(), `SELECT id, password FROM users WHERE username=$1`, req.Username).Scan(&id, &hashedPassword)
 
     if err != nil {
         println(err.Error())
@@ -63,9 +63,9 @@ func Login(c *gin.Context) {
         return
     }
 
-    cfg := c.MustGet("config").(*config.Config)
+    environmentVars := c.MustGet("env").(*env.Env)
 
-    token, err := auth.CreateToken(cfg, id, req.Username)
+    token, err := auth.CreateToken(environmentVars, id, req.Username)
 
     if err != nil {
         println(err.Error())
@@ -73,7 +73,7 @@ func Login(c *gin.Context) {
         return
     }
 
-    c.SetCookie("token", token, cfg.TokenLifetime * 60, "/", "", false, true)
+    c.SetCookie("token", token, environmentVars.TokenLifetime * 60, "/", "", false, true)
     c.Status(http.StatusOK)
 }
 
@@ -88,9 +88,9 @@ func Logout(c *gin.Context) {
         return
     }
 
-    cfg := c.MustGet("config").(*config.Config)
+    environmentVars := c.MustGet("env").(*env.Env)
 
-    err = auth.DisableToken(cfg, token)
+    err = auth.DisableToken(environmentVars, token)
 
     if err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

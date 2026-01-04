@@ -1,18 +1,18 @@
-package config
+package env
 
 import (
 	"os"
 	"strconv"
 )
 
-type Config struct {
+type Env struct {
     ServerPort string
     DatabaseUri string
     TokenLifetime int
     TokenSecret string
 }
 
-func Load() *Config {
+func Load() *Env {
     
     tokenLifetimeStr := getEnv("TOKEN_LIFETIME", "5")
     tokenLifetime, err := strconv.Atoi(tokenLifetimeStr)
@@ -21,7 +21,7 @@ func Load() *Config {
         tokenLifetime = 5 // Default
     }
 
-    return &Config{
+    return &Env{
         ServerPort: getEnv("PORT", "8369"),
         DatabaseUri: getEnv("DATABASE_URI", "postgres://test:test@localhost:5432/testdb?sslmode=disable"),
         TokenLifetime: tokenLifetime,

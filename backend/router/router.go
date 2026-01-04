@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
-	"dia-manager-backend/config"
+	"dia-manager-backend/env"
 
 	authHandler "dia-manager-backend/handler/auth"
 	catheterHandler "dia-manager-backend/handler/catheter"
@@ -12,12 +12,12 @@ import (
 	"dia-manager-backend/middleware"
 )
 
-func SetupRouter(cfg *config.Config) *gin.Engine {
+func SetupRouter(env *env.Env) *gin.Engine {
     r := gin.Default()
 
-	// Inject config into context for all requests
+	// Inject env into context for all requests
     r.Use(func(c *gin.Context) {
-        c.Set("config", cfg)
+        c.Set("env", env)
         c.Next()
     })
 

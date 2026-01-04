@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"dia-manager-backend/config"
+	"dia-manager-backend/env"
 	"dia-manager-backend/utils"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -22,7 +22,7 @@ func CreateUser(username string, password string) (string, error) {
         return "", errors.New("failed to hash password")
     }
     
-    err = config.DB.QueryRow(context.Background(), `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`, username, hashedPassword).Scan(&id)
+    err = env.DB.QueryRow(context.Background(), `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id`, username, hashedPassword).Scan(&id)
 
     if err != nil {
         println(err.Error())
@@ -32,17 +32,17 @@ func CreateUser(username string, password string) (string, error) {
     return id, nil
 }
 
-func CreateToken(cfg *config.Config, id string, username string) (string, error) {
+func CreateToken(envVars *env.Env, id string, username string) (string, error) {
     claims := jwt.MapClaims{
         "user_id":  id,
         "username": username,
-        "exp":     time.Now().Add(time.Duration(cfg.TokenLifetime) * time.Minute).Unix(),
+        "exp":     time.Now().Add(time.Duration(envVars.TokenLifetime) * time.Minute).Unix(),
         "iat":      time.Now().Unix(),
     }
 
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-    secretKey := []byte(cfg.TokenSecret)
+    secretKey := []byte(envVars.TokenSecret)
     tokenString, err := token.SignedString(secretKey)
     
     if err != nil {
@@ -53,13 +53,13 @@ func CreateToken(cfg *config.Config, id string, username string) (string, error)
     return tokenString, nil
 }
 
-func DisableToken(cfg *config.Config, tokenString string) (error) {
+func DisableToken(envVars *env.Env, tokenString string) (error) {
     
     token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
         if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
             return nil, errors.New("unexpected signing method")
         }
-        return []byte(cfg.TokenSecret), nil
+        return []byte(envVars.TokenSecret), nil
     })
 
     if err != nil {
@@ -99,7 +99,7 @@ func DisableToken(cfg *config.Config, tokenString string) (error) {
     }
 
     // Store invalid token so that the auth middleware knows this token is not valid even though its not expired
-    _, err = config.DB.Exec(context.Background(), `INSERT INTO invalid_tokens (token, expires) VALUES ($1, $2)`, tokenString, expTime)
+    _, err = env.DB.Exec(context.Background(), `INSERT INTO invalid_tokens (token, expires) VALUES ($1, $2)`, tokenString, expTime)
     
     if err != nil {
         return err

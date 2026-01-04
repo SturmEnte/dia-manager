@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"dia-manager-backend/config"
 	"dia-manager-backend/enums"
+	"dia-manager-backend/env"
 	"dia-manager-backend/models"
 	"dia-manager-backend/types"
 	"dia-manager-backend/utils"
@@ -30,7 +30,7 @@ func CreateCatheter(userId string, startedAt time.Time, endedAt *time.Time, chan
 	}
 
 	query, args := utils.BuildDynamicInsert("catheters", pairs, []string{"id"})
-	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&id)
+	err := env.DB.QueryRow(context.Background(), query, args...).Scan(&id)
 
 	if err != nil {
 	    println(err.Error())
@@ -69,7 +69,7 @@ func UpdateCatheter(userId string, catheterId string, startedAt *time.Time, ende
 	println(query)
 
 	var dummy int
-	err := config.DB.QueryRow(context.Background(), query, args...).Scan(&dummy)
+	err := env.DB.QueryRow(context.Background(), query, args...).Scan(&dummy)
 	
 	if err != nil && err.Error() != "no rows in result set"  {
 		println(err.Error())
@@ -83,7 +83,7 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
     
     var catheter models.Catheter
 
-    err := config.DB.QueryRow(context.Background(), 
+    err := env.DB.QueryRow(context.Background(), 
         `SELECT * FROM catheters WHERE user_id=$1 AND id=$2`, 
         userId, catheterId).Scan(&catheter.ID, &catheter.UserID, &catheter.StartedAt, &catheter.EndedAt, &catheter.ChangeReason)
 
@@ -101,7 +101,7 @@ func GetCatheter(userId string, catheterId string) (models.Catheter, error) {
 
 func GetCatheters(userId string) ([]models.Catheter, error) {
 	
-	rows, err := config.DB.Query(context.Background(), `SELECT * FROM catheters WHERE user_id = $1`, userId)
+	rows, err := env.DB.Query(context.Background(), `SELECT * FROM catheters WHERE user_id = $1`, userId)
 	
 	if err != nil {
 		println(err.Error())
@@ -141,7 +141,7 @@ func DeleteCatheter(userId string, catheterId string) (error) {
 
 	var dummy int
 
-	err := config.DB.QueryRow(context.Background(), `DELETE FROM catheters WHERE id=$1 AND user_id=$2`, catheterId, userId).Scan(&dummy)
+	err := env.DB.QueryRow(context.Background(), `DELETE FROM catheters WHERE id=$1 AND user_id=$2`, catheterId, userId).Scan(&dummy)
 	
 	// Missing not found error
 
