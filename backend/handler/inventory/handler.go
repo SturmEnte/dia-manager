@@ -10,6 +10,7 @@ import (
 	"dia-manager-backend/utils"
 )
 
+// Item Structure
 func CreateItemStructure(c *gin.Context) {
 
 	var req CreateItemStructureRequest
@@ -30,4 +31,28 @@ func CreateItemStructure(c *gin.Context) {
     }
 
 	c.JSON(http.StatusCreated, gin.H{"id": structureId})
+}
+
+// Items
+func CreateItems(c *gin.Context) { 
+
+	var req CreateItemsRequest
+	
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+	}
+
+	var userId string = utils.GetUserIdByContext(c)
+
+	itemIds, err := inventoryService.CreateItems(userId, req.Id, req.Items)
+
+	if err != nil {
+        log.Println(err.Error())
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
+        return
+    }
+
+	c.JSON(http.StatusCreated, gin.H{"ids": itemIds})
+
 }

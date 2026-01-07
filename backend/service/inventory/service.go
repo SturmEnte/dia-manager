@@ -32,3 +32,32 @@ func CreateItemStructure(userId string, name string, attributes map[string]inter
 
 	return id, nil
 }
+
+func CreateItems(userId string, structureId string, items []map[string]interface{}) ([]string, error) {
+	ids := make([]string, 0, len(items))
+
+	for i := 0; i < len(items); i++ {
+		// marshal item map to jsonb
+		itemJSON, err := json.Marshal(items[i])
+		if err != nil {
+			return nil, errors.New("failed to marshal item data")
+		}
+
+		pairs := []types.Pair{
+			{Key: "structure_id", Value: structureId},
+			{Key: "data", Value: itemJSON},
+		}
+
+		query, args := utils.BuildDynamicInsert("items", pairs, []string{"id"})
+
+		var id string
+		err = env.DB.QueryRow(context.Background(), query, args...).Scan(&id)
+		if err != nil {
+			return nil, errors.New("failed to insert item into the database")
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}

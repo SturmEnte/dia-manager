@@ -34,6 +34,16 @@ CREATE TABLE IF NOT EXISTS item_structures (
 CREATE INDEX IF NOT EXISTS idx_item_structures_user_id ON item_structures(user_id);
 CREATE INDEX IF NOT EXISTS idx_item_structures_attributes_gin ON item_structures USING GIN (attributes);
 
+CREATE TABLE IF NOT EXISTS items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    structure_id UUID NOT NULL REFERENCES item_structures(id) ON DELETE CASCADE,
+    data JSONB NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_items_structure_id ON items(structure_id);
+CREATE INDEX IF NOT EXISTS idx_items_data_gin ON items USING GIN (data);
+
 -- Migration from 1.0.x to 1.1.x --
 CREATE TABLE IF NOT EXISTS invalid_tokens (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
