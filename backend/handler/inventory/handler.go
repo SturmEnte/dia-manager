@@ -1,6 +1,7 @@
 package inventory
 
 import (
+	"errors"
 	"log"
 	"net/http"
 
@@ -25,10 +26,14 @@ func CreateItemStructure(c *gin.Context) {
 	structureId, err := inventoryService.CreateItemStructure(userId, req.Name, req.Attributes)
 
 	if err != nil {
-        log.Println(err.Error())
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
-        return
-    }
+		log.Println(err.Error())
+		if errors.Is(err, inventoryService.ErrUserInput) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
+		return
+	}
 
 	c.JSON(http.StatusCreated, gin.H{"id": structureId})
 }
@@ -48,10 +53,14 @@ func CreateItems(c *gin.Context) {
 	itemIds, err := inventoryService.CreateItems(userId, req.StructureId, req.Items)
 
 	if err != nil {
-        log.Println(err.Error())
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
-        return
-    }
+		log.Println(err.Error())
+		if errors.Is(err, inventoryService.ErrUserInput) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
+		return
+	}
 
 	c.JSON(http.StatusCreated, gin.H{"ids": itemIds})
 
