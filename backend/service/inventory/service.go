@@ -34,6 +34,7 @@ func CreateItemStructure(userId string, name string, attributes map[string]inter
 }
 
 func CreateItems(userId string, structureId string, items []map[string]interface{}) ([]string, error) {
+	// TBD: Check if items match the structure
 	ids := make([]string, 0, len(items))
 
 	for i := 0; i < len(items); i++ {

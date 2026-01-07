@@ -51,11 +51,11 @@ func SetupRouter(env *env.Env) *gin.Engine {
 
 	inventory := r.Group("/inventory")
 	{
-		itemStructure := inventory.Group("/structure")
+		itemStructure := inventory.Group("/structures")
 		{
 			itemStructure.POST("", inventoryHandler.CreateItemStructure)
 		}
-		
+
 		items := inventory.Group("/items")
 		{
 			items.POST("", inventoryHandler.CreateItems)
