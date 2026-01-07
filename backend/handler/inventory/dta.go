@@ -7,6 +7,6 @@ type CreateItemStructureRequest struct {
 }
 
 type CreateItemsRequest struct {
-	Id string `json:"id" binding:"required"`
+	StructureId string `json:"structure_id" binding:"required"`
 	Items []map[string]interface{} `json:"items" binding:"required"`
 }

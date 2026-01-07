@@ -45,7 +45,7 @@ func CreateItems(c *gin.Context) {
 
 	var userId string = utils.GetUserIdByContext(c)
 
-	itemIds, err := inventoryService.CreateItems(userId, req.Id, req.Items)
+	itemIds, err := inventoryService.CreateItems(userId, req.StructureId, req.Items)
 
 	if err != nil {
         log.Println(err.Error())
