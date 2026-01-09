@@ -101,7 +101,7 @@ func CreateItemStructure(userId string, name string, attributes map[string]inter
 func CreateItems(userId string, structureId string, items []map[string]interface{}) ([]string, error) {
 	// Load structure attributes from DB
 	var attrsBytes []byte
-	err := env.DB.QueryRow(context.Background(), "SELECT attributes FROM item_structures WHERE id=$1", structureId).Scan(&attrsBytes)
+	err := env.DB.QueryRow(context.Background(), "SELECT attributes FROM item_structures WHERE id=$1 AND user_id=$2", structureId, userId).Scan(&attrsBytes)
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, fmt.Errorf("%w: structure with id '%s' not found", ErrUserInput, structureId)
