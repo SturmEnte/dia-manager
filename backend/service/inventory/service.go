@@ -13,6 +13,43 @@ import (
 	"dia-manager-backend/utils"
 )
 
+func GetItemStructures(userId string) ([]map[string]interface{}, error) {
+	rows, err := env.DB.Query(context.Background(), "SELECT id, name, attributes FROM item_structures WHERE user_id=$1", userId)
+	if err != nil {
+		return nil, errors.New("failed to query item structures from database")
+	}
+	defer rows.Close()
+
+	structures := make([]map[string]interface{}, 0)
+
+	for rows.Next() {
+		var id string
+		var name string
+		var attrsBytes []byte
+
+		if err := rows.Scan(&id, &name, &attrsBytes); err != nil {
+			return nil, errors.New("failed to scan item structure row")
+		}
+
+		var attributes map[string]map[string]interface{}
+		if err := json.Unmarshal(attrsBytes, &attributes); err != nil {
+			return nil, errors.New("failed to parse structure attributes from database")
+		}
+
+		structures = append(structures, map[string]interface{}{
+			"id":         id,
+			"name":       name,
+			"attributes": attributes,
+		})
+	}
+
+	if rows.Err() != nil {
+		return nil, errors.New("error while iterating item structures rows")
+	}
+
+	return structures, nil
+}
+
 // ErrUserInput is returned when the client provided invalid data (bad JSON / invalid structure).
 var ErrUserInput = errors.New("user input error")
 

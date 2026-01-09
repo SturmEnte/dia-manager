@@ -12,6 +12,26 @@ import (
 )
 
 // Item Structure
+func GetItemStructures(c *gin.Context) {
+
+	var userId string = utils.GetUserIdByContext(c)
+
+	structures, err := inventoryService.GetItemStructures(userId)
+
+	if err != nil {
+		log.Println(err.Error())
+		if errors.Is(err, inventoryService.ErrUserInput) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating item structure"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, structures)
+
+}
+
 func CreateItemStructure(c *gin.Context) {
 
 	var req CreateItemStructureRequest
