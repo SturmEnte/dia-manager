@@ -28,7 +28,7 @@ func GetItemStructures(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, structures)
+	c.JSON(http.StatusOK, structures)
 
 }
 
@@ -75,7 +75,7 @@ func GetItems(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, items)
+	c.JSON(http.StatusOK, items)
 }
 
 func CreateItems(c *gin.Context) { 
