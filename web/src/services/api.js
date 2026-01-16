@@ -106,6 +106,37 @@ class DiaManagerAPIService {
 			return { id };
 		}
 	}
+
+	// Inventory
+	// Item Structures
+	async getItemStructures() {
+		const res = await this.request("/inventory/itemStructures", {
+			method: "get",
+		});
+
+		if (!res) return;
+
+		if (res.status === 200) {
+			data = await res.json();
+
+			return data;
+		}
+	}
+
+	// Items
+	async getItemStructures() {
+		const res = await this.request("/inventory/itemStructures", {
+			method: "get",
+		});
+
+		if (!res) return;
+
+		if (res.status === 200) {
+			data = await res.json();
+
+			return data;
+		}
+	}
 }
 
 const api = new DiaManagerAPIService();
