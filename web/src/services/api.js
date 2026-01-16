@@ -124,7 +124,7 @@ class DiaManagerAPIService {
 	}
 
 	// Items
-	async getItemStructures() {
+	async getItems() {
 		const res = await this.request("/inventory/itemStructures", {
 			method: "get",
 		});
