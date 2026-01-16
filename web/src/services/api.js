@@ -117,7 +117,7 @@ class DiaManagerAPIService {
 		if (!res) return;
 
 		if (res.status === 200) {
-			data = await res.json();
+			let data = await res.json();
 
 			return data;
 		}
@@ -132,7 +132,7 @@ class DiaManagerAPIService {
 		if (!res) return;
 
 		if (res.status === 200) {
-			data = await res.json();
+			let data = await res.json();
 
 			return data;
 		}
