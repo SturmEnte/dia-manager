@@ -59,6 +59,25 @@ func CreateItemStructure(c *gin.Context) {
 }
 
 // Items
+func GetItems(c *gin.Context) {
+
+	var userId string = utils.GetUserIdByContext(c)
+
+	items, err := inventoryService.GetItems(userId)
+
+	if err != nil {
+		log.Println(err.Error())
+		if errors.Is(err, inventoryService.ErrUserInput) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while getting items"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, items)
+}
+
 func CreateItems(c *gin.Context) { 
 
 	var req CreateItemsRequest

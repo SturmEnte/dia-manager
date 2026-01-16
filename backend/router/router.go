@@ -59,6 +59,7 @@ func SetupRouter(env *env.Env) *gin.Engine {
 
 		items := inventory.Group("/items")
 		{
+			items.GET("", inventoryHandler.GetItems)
 			items.POST("", inventoryHandler.CreateItems)
 		}
 	}

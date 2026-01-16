@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 
@@ -96,6 +97,45 @@ func CreateItemStructure(userId string, name string, attributes map[string]inter
 	}
 
 	return id, nil
+}
+
+func GetItems(userId string) ([]map[string]interface{}, error) {
+	rows, err := env.DB.Query(context.Background(), "SELECT items.id, items.data, items.structure_id, items.created_at FROM items JOIN item_structures ON structure_id=item_structures.id WHERE item_structures.user_id=$1 ORDER BY items.created_at", userId)
+	if err != nil {
+		return nil, errors.New("failed to query items from database")
+	}
+	defer rows.Close()
+
+	items := make([]map[string]interface{}, 0)
+
+	for rows.Next() {
+		var id string
+		var dataBytes []byte
+		var structureId string
+		var createdAt time.Time
+
+		if err := rows.Scan(&id, &dataBytes, &structureId, &createdAt); err != nil {
+			return nil, errors.New("failed to scan item row")
+		}
+
+		var data map[string]interface{}
+		if err := json.Unmarshal(dataBytes, &data); err != nil {
+			return nil, errors.New("failed to parse item data from database")
+		}
+
+		items = append(items, map[string]interface{}{
+			"id":           id,
+			"structure_id": structureId,
+			"data":         data,
+			"created_at":   createdAt,
+		})
+	}
+
+	if rows.Err() != nil {
+		return nil, errors.New("error while iterating item rows")
+	}
+
+	return items, nil
 }
 
 func CreateItems(userId string, structureId string, items []map[string]interface{}) ([]string, error) {
