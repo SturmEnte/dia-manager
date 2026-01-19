@@ -2,7 +2,10 @@
 import { onMounted, ref } from "vue";
 import api from "../../services/api";
 
-let inventory = new Map();
+import Structure from "../components/Structure.vue";
+
+// Make inventory reactive so Vue updates the template when data arrives
+const inventory = ref([]);
 
 onMounted(async () => {
 	// Map inventory
@@ -11,7 +14,8 @@ onMounted(async () => {
 	for (let i = 0; i < structures.length; i++) {
 		const structure = structures[i];
 
-		inventory.set(structure.id, { name: structure.name, attributes: structure.attributes, items: [] });
+		// push objects into the reactive array and include the id on the value
+		inventory.value.push({ id: structure.id, name: structure.name, attributes: structure.attributes, items: [] });
 	}
 
 	const items = await api.getItems();
@@ -19,26 +23,22 @@ onMounted(async () => {
 	for (let i = 0; i < items.length; i++) {
 		const item = items[i];
 
-		if (!inventory.has(item.structure_id)) {
+		const bucket = inventory.value.find((s) => s.id === item.structure_id);
+		if (!bucket) {
 			console.log("Couldn't find a structure for item with id", item.id);
 			continue;
 		}
 
-		// I dont know why bucket is needed but if I write this code as a one liner it does not work
-		const bucket = inventory.get(item.structure_id);
 		bucket.items.push(item);
-		inventory.set(item.structure_id, bucket);
 	}
-
-	console.log(inventory);
 });
 </script>
 
 <template>
 	<div id="main">
-		<div>Test</div>
-		<br />
-		<p>{{ JSON.stringify(test) }}</p>
+		<div id="structures">
+			<Structure class="structure" v-for="structure in inventory" :key="structure.id" :id="structure.id" :name="structure.name" :items="structure.items" :attributes="structure.attributes" />
+		</div>
 	</div>
 </template>
 
@@ -47,7 +47,15 @@ onMounted(async () => {
 	display: flex;
 	flex-direction: row;
 	height: 100%;
+}
 
-	color: black;
+#structures {
+	display: flex;
+	flex-direction: column;
+	width: 70%;
+}
+
+.structure {
+	margin-bottom: var(--padding);
 }
 </style>
