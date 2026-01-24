@@ -9,29 +9,61 @@ const props = defineProps({
 		required: true,
 	},
 	attributes: {
-		type: Object,
+		type: Array,
 		required: true,
+	},
+	generalInformation: {
+		type: Array,
+		required: true
 	},
 	items: {
 		type: Array,
 		required: true,
 	},
 });
+
+console.log("d")
+console.log(props.generalInformation)
+console.log(props.attributes)
+console.log(props.items)
 </script>
 
 <template>
-	<div id="structure">
-		<div class="row">
-			<div class="attr-name">Name:</div>
-			<div>{{ props.name }}</div>
+	<div>
+		<div id="structure">
+				<div class="info">
+					<div class="attr-name">Name:</div>
+					<div>{{ props.name }}</div>
+				</div>
+				<div class="info">
+					<div class="attr-name">Menge:</div>
+					<div>{{ props.items.length }}</div>
+				</div>
+				
+				<div class="info" v-for="information in props.generalInformation" :key="information.name">
+					<div class="attr-name">{{information.name}}:</div>
+					<div>{{ information.value }}</div>
+				</div>
 		</div>
-		<div class="row">
-			<div class="attr-name">Menge:</div>
-			<div>{{ props.items.length }}</div>
-		</div>
-		<div class="row">
-			<div class="attr-name">Name:</div>
-			<div>{{ props.name }}</div>
+		<div id="items">
+				<div class="item" v-for="item in props.items" :key="item.id">
+					<div class="info">
+						<div class="attr-name">ID:</div>
+						<div>{{ item.id }}</div>
+					</div>
+					<div class="info">
+						<div class="attr-name">Structure ID:</div>
+						<div>{{ item.structure_id }}</div>
+					</div>
+					<div class="info">
+						<div class="attr-name">Created At:</div>
+						<div>{{ item.created_at }}</div>
+					</div>
+					<div class="info" v-for="(value, key) in item.data" :key="key">
+						<div class="attr-name">{{ key }}:</div>
+						<div>{{ value }}</div>
+					</div>
+				</div>
 		</div>
 	</div>
 </template>
@@ -47,11 +79,28 @@ const props = defineProps({
 	box-sizing: border-box;
 }
 
-.row {
+.info {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
+}
+
+#items {
+	padding: var(--padding);
+	box-sizing: border-box;
+	border-radius: var(--radius);
+	background: var(--col-3);
+	display: flex;
+	flex-direction: column;
+	gap: var(--padding);
+}
+
+.item {
+	background: var(--col-2);
+	border-radius: var(--radius);
+	padding: var(--padding);
+	box-sizing: border-box;
 }
 </style>

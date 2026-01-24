@@ -15,7 +15,13 @@ onMounted(async () => {
 		const structure = structures[i];
 
 		// push objects into the reactive array and include the id on the value
-		inventory.value.push({ id: structure.id, name: structure.name, attributes: structure.attributes, items: [] });
+		inventory.value.push({ 
+			id: structure.id, 
+			name: structure.name, 
+			attributes: structure.attributes, 
+			generalInformation: structure.general_information,
+			items: [] 
+		});
 	}
 
 	const items = await api.getItems();
@@ -36,8 +42,8 @@ onMounted(async () => {
 
 <template>
 	<div id="main">
-		<div id="structures">
-			<Structure class="structure" v-for="structure in inventory" :key="structure.id" :id="structure.id" :name="structure.name" :items="structure.items" :attributes="structure.attributes" />
+		<div id="structures" class="scrollbar">
+			<Structure class="structure" v-for="structure in inventory" :key="structure.id" :id="structure.id" :name="structure.name" :items="structure.items" :attributes="structure.attributes" :generalInformation="structure.generalInformation" />
 		</div>
 	</div>
 </template>
@@ -47,15 +53,22 @@ onMounted(async () => {
 	display: flex;
 	flex-direction: row;
 	height: 100%;
+	overflow: hidden;
 }
 
 #structures {
 	display: flex;
 	flex-direction: column;
 	width: 70%;
+	height: 100%;
+	overflow-y: auto;
 }
 
 .structure {
 	margin-bottom: var(--padding);
+}
+
+.structure:last-child {
+	margin: 0;
 }
 </style>
