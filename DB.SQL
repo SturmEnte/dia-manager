@@ -28,11 +28,13 @@ CREATE TABLE IF NOT EXISTS item_structures (
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
     attributes JSONB NOT NULL,
+    general_information JSONB NOT NULL DEFAULT '[]'::jsonb,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_item_structures_user_id ON item_structures(user_id);
 CREATE INDEX IF NOT EXISTS idx_item_structures_attributes_gin ON item_structures USING GIN (attributes);
+CREATE INDEX IF NOT EXISTS idx_item_structures_general_info_gin ON item_structures USING GIN (general_information);
 
 CREATE TABLE IF NOT EXISTS items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -55,3 +57,19 @@ CREATE TABLE IF NOT EXISTS invalid_tokens (
 
 ALTER TABLE catheters
 ADD COLUMN change_reason smallint DEFAULT 0 NOT NULL;
+
+-- Migration from 1.1.x to 1.2.x --
+-- Add general_information column to item_structures if it doesn't exist
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'item_structures' AND column_name = 'general_information'
+    ) THEN
+        ALTER TABLE item_structures 
+        ADD COLUMN general_information JSONB NOT NULL DEFAULT '[]'::jsonb;
+        
+        CREATE INDEX IF NOT EXISTS idx_item_structures_general_info_gin 
+        ON item_structures USING GIN (general_information);
+    END IF;
+END $$;

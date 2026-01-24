@@ -15,7 +15,7 @@ import (
 )
 
 func GetItemStructures(userId string) ([]map[string]interface{}, error) {
-	rows, err := env.DB.Query(context.Background(), "SELECT id, name, attributes FROM item_structures WHERE user_id=$1", userId)
+	rows, err := env.DB.Query(context.Background(), "SELECT id, name, attributes, general_information FROM item_structures WHERE user_id=$1", userId)
 	if err != nil {
 		return nil, errors.New("failed to query item structures from database")
 	}
@@ -27,20 +27,27 @@ func GetItemStructures(userId string) ([]map[string]interface{}, error) {
 		var id string
 		var name string
 		var attrsBytes []byte
+		var generalInfoBytes []byte
 
-		if err := rows.Scan(&id, &name, &attrsBytes); err != nil {
+		if err := rows.Scan(&id, &name, &attrsBytes, &generalInfoBytes); err != nil {
 			return nil, errors.New("failed to scan item structure row")
 		}
 
-		var attributes map[string]map[string]interface{}
+		var attributes []map[string]interface{}
 		if err := json.Unmarshal(attrsBytes, &attributes); err != nil {
 			return nil, errors.New("failed to parse structure attributes from database")
 		}
 
+		var generalInformation []map[string]interface{}
+		if err := json.Unmarshal(generalInfoBytes, &generalInformation); err != nil {
+			return nil, errors.New("failed to parse structure general information from database")
+		}
+
 		structures = append(structures, map[string]interface{}{
-			"id":         id,
-			"name":       name,
-			"attributes": attributes,
+			"id":                   id,
+			"name":                 name,
+			"attributes":           attributes,
+			"general_information":  generalInformation,
 		})
 	}
 
@@ -51,41 +58,51 @@ func GetItemStructures(userId string) ([]map[string]interface{}, error) {
 	return structures, nil
 }
 
-// ErrUserInput is returned when the client provided invalid data (bad JSON / invalid structure).
 var ErrUserInput = errors.New("user input error")
 
-func CreateItemStructure(userId string, name string, attributes map[string]interface{}) (string, error) {
-	// Validate attributes: each parameter must be an object containing only
-	// "required" (bool) and/or "default" (any). Anything else -> user error.
-	for attrName, raw := range attributes {
-		paramMap, ok := raw.(map[string]interface{})
-		if !ok {
-			return "", fmt.Errorf("%w: attribute '%s' must be an object with optional 'required' and/or 'default' fields", ErrUserInput, attrName)
+func CreateItemStructure(userId string, name string, attributes []map[string]interface{}, generalInformation []map[string]interface{}) (string, error) {
+	// Validate attributes: each attribute must be an object containing a "required" field (bool)
+	// and may contain a "name" field (string)
+	for i, attr := range attributes {
+		if attr == nil {
+			return "", fmt.Errorf("%w: attribute at index %d is null", ErrUserInput, i)
 		}
 
-		for k := range paramMap {
-			if k != "required" && k != "default" {
-				return "", fmt.Errorf("%w: attribute '%s' contains invalid field '%s'", ErrUserInput, attrName, k)
-			}
-		}
-
-		if req, exists := paramMap["required"]; exists {
+		// Check if "required" field exists and is boolean
+		if req, exists := attr["required"]; exists {
 			if _, ok := req.(bool); !ok {
-				return "", fmt.Errorf("%w: attribute '%s' field 'required' must be boolean", ErrUserInput, attrName)
+				return "", fmt.Errorf("%w: attribute at index %d field 'required' must be boolean", ErrUserInput, i)
+			}
+		} else {
+			return "", fmt.Errorf("%w: attribute at index %d must have a 'required' field", ErrUserInput, i)
+		}
+
+		// Validate allowed fields: name, required
+		for k := range attr {
+			if k != "name" && k != "required" {
+				return "", fmt.Errorf("%w: attribute at index %d contains invalid field '%s'", ErrUserInput, i, k)
 			}
 		}
-		// default can be any JSON value, no type check required
 	}
+
+	// Validate general information: each entry can contain any fields
+	// No specific validation required for general information entries
 
 	attributesJSON, err := json.Marshal(attributes)
 	if err != nil {
 		return "", errors.New("failed to marshal attributes")
 	}
 
+	generalInfoJSON, err := json.Marshal(generalInformation)
+	if err != nil {
+		return "", errors.New("failed to marshal general information")
+	}
+
 	pairs := []types.Pair{
 		{Key: "user_id", Value: userId},
 		{Key: "name", Value: name},
 		{Key: "attributes", Value: attributesJSON},
+		{Key: "general_information", Value: generalInfoJSON},
 	}
 
 	query, args := utils.BuildDynamicInsert("item_structures", pairs, []string{"id"})
@@ -149,9 +166,17 @@ func CreateItems(userId string, structureId string, items []map[string]interface
 		return nil, errors.New("failed to load item structure from database")
 	}
 
-	var structureAttrs map[string]map[string]interface{}
+	var structureAttrs []map[string]interface{}
 	if err := json.Unmarshal(attrsBytes, &structureAttrs); err != nil {
 		return nil, errors.New("failed to parse structure attributes from database")
+	}
+
+	// Build a map of attribute names to their definitions for easier lookup
+	attrMap := make(map[string]map[string]interface{})
+	for _, attr := range structureAttrs {
+		if name, ok := attr["name"].(string); ok {
+			attrMap[name] = attr
+		}
 	}
 
 	ids := make([]string, 0, len(items))
@@ -161,30 +186,27 @@ func CreateItems(userId string, structureId string, items []map[string]interface
 
 		// Verify that no item keys exist that are not defined in the structure
 		for k := range item {
-			if _, ok := structureAttrs[k]; !ok {
+			if _, ok := attrMap[k]; !ok {
 				return nil, fmt.Errorf("%w: item contains unknown parameter '%s'", ErrUserInput, k)
 			}
 		}
 
-		// Ensure required parameters are present, and fill defaults for missing ones
-		for paramName, paramDef := range structureAttrs {
-			// paramDef may contain "required" (bool) and/or "default"
+		// Ensure required parameters are present
+		for attrName, paramDef := range attrMap {
+			// paramDef may contain "required" (bool) and "name" (string)
 			required := false
 			if r, ok := paramDef["required"]; ok {
 				if rb, ok2 := r.(bool); ok2 {
 					required = rb
 				} else {
-					return nil, fmt.Errorf("%w: structure definition for '%s' has invalid 'required' value", ErrUserInput, paramName)
+					return nil, fmt.Errorf("%w: structure definition for '%s' has invalid 'required' value", ErrUserInput, attrName)
 				}
 			}
 
-			if _, provided := item[paramName]; !provided {
+			if _, provided := item[attrName]; !provided {
 				// not provided in item
-				if def, hasDefault := paramDef["default"]; hasDefault {
-					// set default
-					item[paramName] = def
-				} else if required {
-					return nil, fmt.Errorf("%w: required parameter '%s' missing", ErrUserInput, paramName)
+				if required {
+					return nil, fmt.Errorf("%w: required parameter '%s' missing", ErrUserInput, attrName)
 				}
 			}
 		}

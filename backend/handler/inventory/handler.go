@@ -43,7 +43,7 @@ func CreateItemStructure(c *gin.Context) {
 
 	var userId string = utils.GetUserIdByContext(c)
 
-	structureId, err := inventoryService.CreateItemStructure(userId, req.Name, req.Attributes)
+	structureId, err := inventoryService.CreateItemStructure(userId, req.Name, req.Attributes, req.GeneralInformation)
 
 	if err != nil {
 		log.Println(err.Error())
