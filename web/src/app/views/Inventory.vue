@@ -57,10 +57,7 @@ onMounted(async () => {
 }
 
 #structures {
-	display: flex;
-	flex-direction: column;
 	width: 70%;
-	height: 100%;
 	overflow-y: auto;
 }
 

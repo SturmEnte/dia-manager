@@ -21,15 +21,10 @@ const props = defineProps({
 		required: true,
 	},
 });
-
-console.log("d")
-console.log(props.generalInformation)
-console.log(props.attributes)
-console.log(props.items)
 </script>
 
 <template>
-	<div>
+	<div id="container">
 		<div id="structure">
 				<div class="info">
 					<div class="attr-name">Name:</div>
@@ -84,7 +79,6 @@ console.log(props.items)
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	width: 100%;
 }
 
 #items {
