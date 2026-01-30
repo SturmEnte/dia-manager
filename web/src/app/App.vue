@@ -23,12 +23,12 @@ onMounted(async () => {
 				<div id="app-name">DiaManager</div>
 				<nav>
 					<router-link to="/">Dashboard</router-link>
-					<router-link to="/inventory">Inventory</router-link>
+					<router-link to="/inventory">Lager</router-link>
 					<router-link to="/catheters">Katheter</router-link>
 				</nav>
 			</div>
 			<div>
-				Welcome back <span id="username">{{ username }}</span> !
+				Wilkommen zurück <span id="username">{{ username }}</span> !
 			</div>
 		</div>
 		<main>
