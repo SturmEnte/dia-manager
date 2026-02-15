@@ -138,7 +138,7 @@ class DiaManagerAPIService {
 
 		if (!res) return;
 
-		if (res.status === 200) {
+		if (res.status === 201) {
 			let data = await res.json();
 
 			return data.id;
