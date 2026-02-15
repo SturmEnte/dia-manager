@@ -13,13 +13,15 @@ const currentTab = ref("create-structure");
 // Use a unique ID generator to prevent key collisions
 const generateId = () => Date.now() + Math.random();
 
+const structureName = ref("");
+
 const generallInformation = ref([]);
 const attributes = ref([]);
 
 function addGeneralInformation() {
 	generallInformation.value.push({
 		id: "gi" + generateId(),
-		key: "",
+		name: "",
 		value: "",
 	});
 }
@@ -34,6 +36,44 @@ function addAttribute() {
 
 addGeneralInformation();
 addAttribute();
+
+async function createStructure() {
+	let generallInformationFormated = [];
+	generallInformation.value.forEach((elem) => {
+		generallInformationFormated.push({ name: elem.name, value: elem.value });
+	});
+
+	let attributesFormated = [];
+	attributes.value.forEach((elem) => {
+		attributesFormated.push({ name: elem.name, required: elem.required });
+	});
+
+	const id = await api.createItemStructures(structureName.value, generallInformationFormated, attributesFormated);
+
+	if (!id) {
+		alert("Failed");
+		return;
+	}
+
+	// Insert new structure
+	inventory.value.push({
+		id: id,
+		name: structureName.value,
+		attributes: attributesFormated,
+		generalInformation: generallInformationFormated,
+		items: [],
+	});
+
+	// Clear
+	structureName.value = "";
+	generallInformation.value = [];
+	attributes.value = [];
+
+	addGeneralInformation();
+	addAttribute();
+
+	alert("Created");
+}
 
 onMounted(async () => {
 	// Map inventory
@@ -66,10 +106,6 @@ onMounted(async () => {
 		bucket.items.push(item);
 	}
 });
-
-function test() {
-	console.log(currentTab.value);
-}
 </script>
 
 <template>
@@ -98,13 +134,13 @@ function test() {
 			<div class="editor-input scrollbar" v-if="currentTab === 'create-structure'">
 				<!-- <form @submit.prevent> -->
 				<label for="name">Name:</label>
-				<input type="text" id="name" />
+				<input type="text" v-model="structureName" />
 
 				<br /><br />
 
 				<div>Allgemeine Informationen:</div>
 				<div class="general-information-pair" v-for="(elem, index) in generallInformation" :key="elem.id">
-					<input type="text" placeholder="Name/Titel" v-model="elem.key" />
+					<input type="text" placeholder="Name/Titel" v-model="elem.name" />
 					<input type="text" placeholder="Wert" v-model="elem.value" />
 					<button v-if="index != 0" @click="generallInformation.splice(index, 1)">-</button>
 				</div>
@@ -123,7 +159,7 @@ function test() {
 
 				<br /><br />
 
-				<button id="create-structure">Erstellen</button>
+				<button id="create-structure" @click="createStructure">Erstellen</button>
 				<!-- </form> -->
 			</div>
 
