@@ -7,7 +7,33 @@ import Structure from "../components/Structure.vue";
 // Make inventory reactive so Vue updates the template when data arrives
 const inventory = ref([]);
 
+// Editor
 const currentTab = ref("create-structure");
+
+// Use a unique ID generator to prevent key collisions
+const generateId = () => Date.now() + Math.random();
+
+const generallInformation = ref([]);
+const attributes = ref([]);
+
+function addGeneralInformation() {
+	generallInformation.value.push({
+		id: "gi" + generateId(),
+		key: "",
+		value: "",
+	});
+}
+
+function addAttribute() {
+	attributes.value.push({
+		id: "att" + generateId(),
+		name: "",
+		required: false,
+	});
+}
+
+addGeneralInformation();
+addAttribute();
 
 onMounted(async () => {
 	// Map inventory
@@ -17,12 +43,12 @@ onMounted(async () => {
 		const structure = structures[i];
 
 		// push objects into the reactive array and include the id on the value
-		inventory.value.push({ 
-			id: structure.id, 
-			name: structure.name, 
-			attributes: structure.attributes, 
+		inventory.value.push({
+			id: structure.id,
+			name: structure.name,
+			attributes: structure.attributes,
 			generalInformation: structure.general_information,
-			items: [] 
+			items: [],
 		});
 	}
 
@@ -42,31 +68,66 @@ onMounted(async () => {
 });
 
 function test() {
-	console.log(currentTab.value)
+	console.log(currentTab.value);
 }
 </script>
 
 <template>
 	<div id="main">
 		<div id="structures" class="scrollbar">
-			<Structure class="structure" v-for="structure in inventory" :key="structure.id" :id="structure.id" :name="structure.name" :items="structure.items" :attributes="structure.attributes" :generalInformation="structure.generalInformation" />
+			<Structure
+				class="structure"
+				v-for="structure in inventory"
+				:key="structure.id"
+				:id="structure.id"
+				:name="structure.name"
+				:items="structure.items"
+				:attributes="structure.attributes"
+				:generalInformation="structure.generalInformation"
+			/>
 		</div>
 		<div id="editor">
 			<form id="selection" @input="test">
 				<input type="radio" id="create-structure" value="create-structure" v-model="currentTab" />
-				<label for="create-structure">Create Structure</label>
+				<label for="create-structure">Struktur erstellen</label>
 
 				<input type="radio" id="create-item" value="create-item" v-model="currentTab" />
-				<label for="create-item">Create Item</label>
+				<label for="create-item">Artikel erstellen</label>
 			</form>
 
-			<div v-if="currentTab === 'create-structure'">
-				Create Structure
+			<div class="editor-input scrollbar" v-if="currentTab === 'create-structure'">
+				<!-- <form @submit.prevent> -->
+				<label for="name">Name:</label>
+				<input type="text" id="name" />
+
+				<br /><br />
+
+				<div>Allgemeine Informationen:</div>
+				<div class="general-information-pair" v-for="(elem, index) in generallInformation" :key="elem.id">
+					<input type="text" placeholder="Name/Titel" v-model="elem.key" />
+					<input type="text" placeholder="Wert" v-model="elem.value" />
+					<button v-if="index != 0" @click="generallInformation.splice(index, 1)">-</button>
+				</div>
+				<button id="add-general-information" @click="addGeneralInformation">+</button>
+
+				<br /><br />
+
+				<div>Attribute:</div>
+				<div class="attribute" v-for="(elem, index) in attributes" :key="elem.id">
+					<input type="text" placeholder="Name/Titel" v-model="elem.name" />
+					<label for="required">Muss ausgefüllt werden?</label>
+					<input type="checkbox" id="required" v-model="elem.required" />
+					<button v-if="index != 0" @click="attributes.splice(index, 1)">-</button>
+				</div>
+				<button id="add-attribute" @click="addAttribute">+</button>
+
+				<br /><br />
+
+				<button id="create-structure">Erstellen</button>
+				<!-- </form> -->
 			</div>
-			
-			<div v-if="currentTab === 'create-item'">
-				Create Item
-			</div>
+
+			<div class="editor-input" v-if="currentTab === 'create-item'">Create Item</div>
 		</div>
 	</div>
 </template>
@@ -85,6 +146,9 @@ function test() {
 	margin-left: var(--padding);
 	border-radius: var(--radius);
 	padding: var(--padding);
+
+	display: flex;
+	flex-direction: column;
 }
 
 #selection {
@@ -113,7 +177,13 @@ function test() {
 }
 
 #selection input:checked + label {
-	background: var(--col-accent);
+	color: var(--col-accent);
+	font-weight: bold;
+}
+
+.editor-input {
+	padding: var(--padding);
+	overflow-y: auto;
 }
 
 #structures {
