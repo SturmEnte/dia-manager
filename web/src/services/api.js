@@ -123,6 +123,28 @@ class DiaManagerAPIService {
 		}
 	}
 
+	async createItemStructures(name, generallInformation, attributes) {
+		const res = await this.request("/inventory/structures", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				name,
+				general_information: generallInformation,
+				attributes,
+			}),
+		});
+
+		if (!res) return;
+
+		if (res.status === 200) {
+			let data = await res.json();
+
+			return data.id;
+		}
+	}
+
 	// Items
 	async getItems() {
 		const res = await this.request("/inventory/items", {
