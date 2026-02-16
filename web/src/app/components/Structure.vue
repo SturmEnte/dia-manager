@@ -14,10 +14,14 @@ const props = defineProps({
 	},
 	generalInformation: {
 		type: Array,
-		required: true
+		required: true,
 	},
 	items: {
 		type: Array,
+		required: true,
+	},
+	selected: {
+		type: String,
 		required: true,
 	},
 });
@@ -25,40 +29,40 @@ const props = defineProps({
 
 <template>
 	<div id="container">
-		<div id="structure">
-				<div class="info">
-					<div class="attr-name">Name:</div>
-					<div>{{ props.name }}</div>
-				</div>
-				<div class="info">
-					<div class="attr-name">Menge:</div>
-					<div>{{ props.items.length }}</div>
-				</div>
-				
-				<div class="info" v-for="information in props.generalInformation" :key="information.name">
-					<div class="attr-name">{{information.name}}:</div>
-					<div>{{ information.value }}</div>
-				</div>
+		<div id="structure" :style="{ background: props.selected == props.id ? 'rgb(255,0,0)' : '' }">
+			<div class="info">
+				<div class="attr-name">Name:</div>
+				<div>{{ props.name }}</div>
+			</div>
+			<div class="info">
+				<div class="attr-name">Menge:</div>
+				<div>{{ props.items.length }}</div>
+			</div>
+
+			<div class="info" v-for="information in props.generalInformation" :key="information.name">
+				<div class="attr-name">{{ information.name }}:</div>
+				<div>{{ information.value }}</div>
+			</div>
 		</div>
 		<div id="items">
-				<div class="item" v-for="item in props.items" :key="item.id">
-					<div class="info">
-						<div class="attr-name">ID:</div>
-						<div>{{ item.id }}</div>
-					</div>
-					<div class="info">
-						<div class="attr-name">Structure ID:</div>
-						<div>{{ item.structure_id }}</div>
-					</div>
-					<div class="info">
-						<div class="attr-name">Created At:</div>
-						<div>{{ item.created_at }}</div>
-					</div>
-					<div class="info" v-for="(value, key) in item.data" :key="key">
-						<div class="attr-name">{{ key }}:</div>
-						<div>{{ value }}</div>
-					</div>
+			<div class="item" v-for="item in props.items" :key="item.id">
+				<div class="info">
+					<div class="attr-name">ID:</div>
+					<div>{{ item.id }}</div>
 				</div>
+				<div class="info">
+					<div class="attr-name">Structure ID:</div>
+					<div>{{ item.structure_id }}</div>
+				</div>
+				<div class="info">
+					<div class="attr-name">Created At:</div>
+					<div>{{ item.created_at }}</div>
+				</div>
+				<div class="info" v-for="(value, key) in item.data" :key="key">
+					<div class="attr-name">{{ key }}:</div>
+					<div>{{ value }}</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>

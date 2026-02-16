@@ -13,6 +13,7 @@ const currentTab = ref("create-structure");
 // Use a unique ID generator to prevent key collisions
 const generateId = () => Date.now() + Math.random();
 
+// Create Structure
 const structureName = ref("");
 
 const generallInformation = ref([]);
@@ -75,6 +76,9 @@ async function createStructure() {
 	alert("Created");
 }
 
+// Create Item
+const selectedStructure = ref("");
+
 onMounted(async () => {
 	// Map inventory
 	const structures = await api.getItemStructures();
@@ -120,6 +124,7 @@ onMounted(async () => {
 				:items="structure.items"
 				:attributes="structure.attributes"
 				:generalInformation="structure.generalInformation"
+				:selected="selectedStructure"
 			/>
 		</div>
 		<div id="editor">
@@ -132,7 +137,6 @@ onMounted(async () => {
 			</form>
 
 			<div class="editor-input scrollbar" v-if="currentTab === 'create-structure'">
-				<!-- <form @submit.prevent> -->
 				<label for="name">Name:</label>
 				<input type="text" v-model="structureName" />
 
@@ -160,10 +164,17 @@ onMounted(async () => {
 				<br /><br />
 
 				<button id="create-structure" @click="createStructure">Erstellen</button>
-				<!-- </form> -->
 			</div>
 
-			<div class="editor-input" v-if="currentTab === 'create-item'">Create Item</div>
+			<div class="editor-input" v-if="currentTab === 'create-item'">
+				<label for="structur">Wähle eine Struktur aus:</label>
+				<br />
+				<select id="structur" v-model="selectedStructure">
+					<option v-for="structure in inventory" :key="structure.id" :value="structure.id">
+						{{ structure.name }}
+					</option>
+				</select>
+			</div>
 		</div>
 	</div>
 </template>
