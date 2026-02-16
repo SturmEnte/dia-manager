@@ -46,18 +46,6 @@ const props = defineProps({
 		</div>
 		<div id="items">
 			<div class="item" v-for="item in props.items" :key="item.id">
-				<div class="info">
-					<div class="attr-name">ID:</div>
-					<div>{{ item.id }}</div>
-				</div>
-				<div class="info">
-					<div class="attr-name">Structure ID:</div>
-					<div>{{ item.structure_id }}</div>
-				</div>
-				<div class="info">
-					<div class="attr-name">Created At:</div>
-					<div>{{ item.created_at }}</div>
-				</div>
 				<div class="info" v-for="(value, key) in item.data" :key="key">
 					<div class="attr-name">{{ key }}:</div>
 					<div>{{ value }}</div>
