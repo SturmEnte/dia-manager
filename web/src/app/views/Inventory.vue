@@ -78,6 +78,74 @@ async function createStructure() {
 
 // Create Item
 const selectedStructure = ref("");
+const attributesCreateItem = ref({});
+const amount = ref(0);
+
+function newStructureSelected() {
+	attributesCreateItem.value = {};
+
+	const structure = inventory.value.find((s) => s.id === selectedStructure.value);
+
+	if (!structure) return;
+
+	structure.attributes.forEach((attribute) => {
+		attributesCreateItem.value[attribute.name] = "";
+	});
+}
+
+async function createItems() {
+	if (!selectedStructure.value) {
+		alert("Bitte wählen Sie eine Struktur aus.");
+		return;
+	}
+
+	if (amount.value <= 0) {
+		alert("Anzahl muss größer als 0 sein.");
+		return;
+	}
+
+	const structure = inventory.value.find((s) => s.id === selectedStructure.value);
+	if (!structure) return;
+
+	// Check required fields
+	for (const attr of structure.attributes) {
+		if (attr.required && !attributesCreateItem.value[attr.name]) {
+			alert(`Das Attribute "${attr.name}" muss ausgefüllt werden.`);
+			return;
+		}
+	}
+
+	const itemsToCreate = [];
+	for (let i = 0; i < amount.value; i++) {
+		itemsToCreate.push({ ...attributesCreateItem.value });
+	}
+
+	const ids = await api.createItems(selectedStructure.value, itemsToCreate);
+
+	if (!ids) {
+		alert("Fehler beim Erstellen der Artikel.");
+		return;
+	}
+
+	// Add to local inventory
+	ids.forEach((id) => {
+		structure.items.push({
+			id: id,
+			structure_id: selectedStructure.value,
+			data: { ...attributesCreateItem.value },
+			created_at: new Date().toISOString(),
+		});
+	});
+
+	// Reset form
+	attributesCreateItem.value = {};
+	structure.attributes.forEach((attribute) => {
+		attributesCreateItem.value[attribute.name] = "";
+	});
+	amount.value = 0;
+
+	alert(`${ids.length} Artikel erstellt.`);
+}
 
 onMounted(async () => {
 	// Map inventory
@@ -169,11 +237,27 @@ onMounted(async () => {
 			<div class="editor-input" v-if="currentTab === 'create-item'">
 				<label for="structur">Wähle eine Struktur aus:</label>
 				<br />
-				<select id="structur" v-model="selectedStructure">
+				<select id="structur" v-model="selectedStructure" @change="newStructureSelected">
 					<option v-for="structure in inventory" :key="structure.id" :value="structure.id">
 						{{ structure.name }}
 					</option>
 				</select>
+
+				<br /><br />
+
+				<div class="" v-for="attribute in inventory.find((s) => s.id === selectedStructure)?.attributes || []" :key="attribute.name">
+					<label :for="attribute.name">{{ attribute.name }}{{ attribute.required ? "*" : "" }}</label>
+					<input type="text" :id="attribute.name" v-model="attributesCreateItem[attribute.name]" />
+				</div>
+				<div>*muss ausgefüllt werden</div>
+
+				<br /><br />
+
+				<input type="number" v-model.number="amount" />
+
+				<br /><br />
+
+				<button @click="createItems">Artikel erstellen</button>
 			</div>
 		</div>
 	</div>

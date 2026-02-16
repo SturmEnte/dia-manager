@@ -159,6 +159,27 @@ class DiaManagerAPIService {
 			return data;
 		}
 	}
+
+	async createItems(structureId, items) {
+		const res = await this.request("/inventory/items", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				structure_id: structureId,
+				items,
+			}),
+		});
+
+		if (!res) return;
+
+		if (res.status === 201) {
+			let data = await res.json();
+
+			return data.ids;
+		}
+	}
 }
 
 const api = new DiaManagerAPIService();
